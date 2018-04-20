@@ -4,6 +4,8 @@
   <%= f.submit "Создать" %>
 <% end %>
 
+<%= link_to 'Подключиться', chats_connect_path %>
+
 <%= javascript_tag do %>
     window.session_token = "<%=j @session_token %>";
 <% end %>

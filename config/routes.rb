@@ -3,6 +3,8 @@ Rails.application.routes.draw do
 
   get 'chats/:token' => 'chats#show'
 
+  get 'chats/connect' => 'chats#connect'
+
   resources :chats
 
 end
