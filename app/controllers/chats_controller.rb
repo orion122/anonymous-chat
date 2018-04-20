@@ -21,6 +21,8 @@ class ChatsController < ApplicationController
 
 
   def connect
+    @random_chat = Chat.where(filled: false).order("RANDOM()").first
 
+    redirect_to action: "show", token: @random_chat.token
   end
 end
