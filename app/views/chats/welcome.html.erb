@@ -1,0 +1,9 @@
+<h1>Welcome</h1>
+
+<%= form_for @chat, url: {action: "create"} do |f| %>
+  <%= f.submit "Создать" %>
+<% end %>
+
+<%= javascript_tag do %>
+    window.session_token = "<%=j @session_token %>";
+<% end %>
