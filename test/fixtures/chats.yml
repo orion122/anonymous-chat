@@ -1,9 +1,0 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  token: MyString
-  filled: false
-
-two:
-  token: MyString
-  filled: false
