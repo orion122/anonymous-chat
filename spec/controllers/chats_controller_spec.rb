@@ -25,6 +25,11 @@ RSpec.describe ChatsController, type: :controller do
       expect(Chat.find(1).filled).to eq(false)
     end
 
+    it "creates a chat with random token" do
+      post :create
+      expect(Chat.find(1).token).to match(/[0-9a-zA-Z_-]{22}/)
+    end
+
     it "redirect to action show" do
       post :create
       expect(response).to redirect_to :action => :show,
