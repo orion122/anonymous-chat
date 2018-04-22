@@ -7,6 +7,11 @@ RSpec.describe ChatsController, type: :controller do
       expect(Session.count).to eq(1)
     end
 
+    it "creates a chat with random session's token" do
+      get :welcome
+      expect(Session.find(1).token).to match(/[0-9a-zA-Z_-]{22}/)
+    end
+
     it "render view welcome" do
       get :welcome
       expect(response).to render_template('welcome')
@@ -25,7 +30,7 @@ RSpec.describe ChatsController, type: :controller do
       expect(Chat.find(1).filled).to eq(false)
     end
 
-    it "creates a chat with random token" do
+    it "creates a chat with random chat's token" do
       post :create
       expect(Chat.find(1).token).to match(/[0-9a-zA-Z_-]{22}/)
     end
