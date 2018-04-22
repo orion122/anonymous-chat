@@ -38,4 +38,19 @@ RSpec.describe ChatsController, type: :controller do
                                       :token => assigns(:chat).token
     end
   end
+
+
+  describe "GET #show" do
+    let(:chat)     { Chat.create(token: 12345) }
+
+    it "assigns @chat" do
+      get :show, params: { token: chat.token }
+      expect(assigns(:chat)).to eq(chat)
+    end
+
+    it "render view show" do
+      get :show, params: { token: chat.token }
+      expect(response).to render_template('show')
+    end
+  end
 end
