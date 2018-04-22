@@ -30,13 +30,6 @@ RSpec.describe ChatsController, type: :controller do
       expect(response).to redirect_to :action => :show,
                                       :token => assigns(:chat).token
     end
-
-    it "redirect to action show with random chat's token" do
-      post :create
-      get :connect
-      expect(response).to redirect_to :action => :show,
-                                      :token => assigns(:chat).token
-    end
   end
 
 
@@ -51,6 +44,16 @@ RSpec.describe ChatsController, type: :controller do
     it "render view show" do
       get :show, params: { token: chat.token }
       expect(response).to render_template('show')
+    end
+  end
+
+
+  describe "GET #connect" do
+    it "redirect to action show random chat" do
+      post :create
+      get :connect
+      expect(response).to redirect_to :action => :show,
+                                      :token => assigns(:chat).token
     end
   end
 end
