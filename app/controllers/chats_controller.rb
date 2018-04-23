@@ -12,7 +12,7 @@ class ChatsController < ApplicationController
     @chat = Chat.create(token: @chat_token)
 
     @session_token = SecureRandom.urlsafe_base64
-    Session.create(token: @session_token)
+    #Session.create(token: @session_token)
 
     redirect_to action: "show", token: @chat_token, session_token: @session_token
   end
@@ -29,7 +29,7 @@ class ChatsController < ApplicationController
     @random_chat = Chat.where(filled: false).order("RANDOM()").first
 
     @session_token = SecureRandom.urlsafe_base64
-    Session.create(token: @session_token)
+    #Session.create(token: @session_token)
 
     redirect_to action: "show", token: @random_chat.token, session_token: @session_token
   end

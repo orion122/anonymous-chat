@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180420083419) do
+ActiveRecord::Schema.define(version: 20180423142115) do
 
   create_table "chats", force: :cascade do |t|
     t.string "token"
@@ -20,10 +20,18 @@ ActiveRecord::Schema.define(version: 20180420083419) do
     t.index ["token"], name: "index_chats_on_token", unique: true
   end
 
+  create_table "messages", force: :cascade do |t|
+    t.string "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.string "token"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "chat_id"
+    t.integer "message_id"
     t.index ["token"], name: "index_sessions_on_token", unique: true
   end
 
