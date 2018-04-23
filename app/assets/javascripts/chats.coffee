@@ -2,15 +2,16 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 $(document).on 'keypress', '.input-box_text', (e) ->
-  $('div[data-session-token]').each ->
-    sessionToken = $(this).data('session-token')
+  ###$('div[data-session-token]').each ->
+    sessionToken = $(this).data('session-token')###
 
-  chat_id = $('.input-box_text').attr('id').split('_')[1]
+  session_token = new URLSearchParams(window.location.search).get('session_token');
+  chat_token = window.location.pathname.split('/')[2];
 
   if e.keyCode == 13 and e.target.value
     App.chat.reply({
-      'chat_id': chat_id,
-      'my_name': 'me',
+      'session_token': session_token,
+      'chat_token': chat_token,
       'message': e.target.value
     })
     e.target.value = ''

@@ -6,4 +6,14 @@ App.chat = App.cable.subscriptions.create "ChatChannel",
     # Called when the subscription has been terminated by the server
 
   received: (data) ->
-    # Called when there's incoming data on the websocket for this channel
+    $messages = $("##{data.chat_id}")
+    $messages.append "<p>#{data.message}</p>"
+    $scroll = $('#messages')
+    $scroll.scrollTop($messages.prop("scrollHeight"))
+
+  reply: (data) ->
+    @perform('reply',
+      session_token: data['session_token'],
+      chat_token: data['chat_token'],
+      message: data['message']
+    )
