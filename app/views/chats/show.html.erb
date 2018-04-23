@@ -1,8 +1,10 @@
 <%= @chat.id %>
 
+<div class="session" data-session-token="<%= @session_token %>"></div>
+
 <div class="main">
   <div class="messages-history" id="messages">
-    <div id=""></div>
+    <div id="<%= @session_token %>"></div>
   </div>
 </div>
 
