@@ -1,8 +1,5 @@
 class ChatsController < ApplicationController
   def welcome
-    #@session_token = SecureRandom.urlsafe_base64
-    #Session.create(token: @session_token)
-
     @chat = Chat.new
   end
 
@@ -10,6 +7,7 @@ class ChatsController < ApplicationController
   def create
     @chat_token = SecureRandom.urlsafe_base64
     @session_token = SecureRandom.urlsafe_base64
+    gon.session_token = @session_token
 
     @chat = Chat.create(token: @chat_token)
     @session = @chat.sessions.create(token: @session_token)
@@ -20,16 +18,22 @@ class ChatsController < ApplicationController
 
   def show
     @chat = Chat.where(token: params[:token]).first
-
     @session_token = params[:session_token]
+    gon.session_token = @session_token
 
-    @session = @chat.sessions.where(token: @session_token).first
-    @messages = @session.messages
+    # @messages_first_session = @chat.sessions.first.messages
+    # @messages_second_session = @chat.sessions.second.messages
+
+    # gon.messages_first_session = @messages_first_session
+    # gon.messages_second_session = @messages_second_session
+
+    # gon.sorted_messages = (@messages_first_session + @messages_second_session).sort_by(&:created_at)
   end
 
 
   def connect
     @session_token = SecureRandom.urlsafe_base64
+    gon.session_token = @session_token
 
     @random_chat = Chat.where(filled: false).order("RANDOM()").first
     @session = @random_chat.sessions.create(token: @session_token)

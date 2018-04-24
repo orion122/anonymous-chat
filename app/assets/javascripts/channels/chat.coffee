@@ -15,6 +15,5 @@ App.chat = App.cable.subscriptions.create "ChatChannel",
   reply: (data) ->
     @perform('reply',
       session_token: data['session_token'],
-      chat_token: data['chat_token'],
       message: data['message']
     )

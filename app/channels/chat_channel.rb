@@ -9,7 +9,6 @@ class ChatChannel < ApplicationCable::Channel
 
   def reply(data)
     session_token = data['session_token']
-    #chat_token = data['chat_token']
     message = data['message']
 
     @session = Session.where(token: session_token).first
