@@ -1,4 +1,4 @@
 class Session < ApplicationRecord
-  has_many :chats
+  belongs_to :chat
   has_many :messages
 end

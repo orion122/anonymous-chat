@@ -1,3 +1,3 @@
 class Chat < ApplicationRecord
-  belongs_to :session
+  has_many :sessions
 end
