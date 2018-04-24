@@ -19,14 +19,18 @@ RSpec.feature "Visiting the root page", type: :feature do
   scenario "The visitor should see a chat's page after clicking the button 'Создать" do
     visit root_path
     click_button('Создать')
-    expect(page).to have_current_path(chat_path(Chat.first.token))
+    chat = Chat.first
+    session = chat.sessions.first
+    expect(page).to have_current_path(chat_path(chat.token, session_token: session.token))
   end
 
   scenario "The visitor should see a chat's page after clicking the link 'Подключиться'" do
     visit root_path
     Chat.create(token: 12345)
     click_link('Подключиться')
-    expect(page).to have_current_path(chat_path(Chat.first.token))
+    chat = Chat.first
+    session = chat.sessions.first
+    expect(page).to have_current_path(chat_path(chat.token, session_token: session.token))
   end
 
   scenario "Page should has input type='text' after clicking the button 'Создать'" do
