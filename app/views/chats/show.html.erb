@@ -2,7 +2,11 @@
 
 <div class="main">
   <div class="messages-history" id="messages">
-    <div id="<%= @session_token %>"></div>
+    <div id="<%= 123 %>">
+      <% @messages.each do |message| %>
+        <p><%= message.message %></p>
+      <% end %>
+    </div>
   </div>
 </div>
 

@@ -22,6 +22,9 @@ class ChatsController < ApplicationController
     @chat = Chat.where(token: params[:token]).first
 
     @session_token = params[:session_token]
+
+    @session = @chat.sessions.where(token: @session_token).first
+    @messages = @session.messages
   end
 
 
