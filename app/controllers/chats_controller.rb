@@ -9,10 +9,10 @@ class ChatsController < ApplicationController
 
   def create
     @chat_token = SecureRandom.urlsafe_base64
-    @chat = Chat.create(token: @chat_token)
-
     @session_token = SecureRandom.urlsafe_base64
-    #Session.create(token: @session_token)
+
+    @chat = Chat.create(token: @chat_token)
+    @session = @chat.sessions.create(token: @session_token)
 
     redirect_to action: "show", token: @chat_token, session_token: @session_token
   end
@@ -26,10 +26,11 @@ class ChatsController < ApplicationController
 
 
   def connect
-    @random_chat = Chat.where(filled: false).order("RANDOM()").first
-
     @session_token = SecureRandom.urlsafe_base64
-    #Session.create(token: @session_token)
+
+    @random_chat = Chat.where(filled: false).order("RANDOM()").first
+    @session = @random_chat.sessions.create(token: @session_token)
+    @random_chat.update_attribute(:filled, true)
 
     redirect_to action: "show", token: @random_chat.token, session_token: @session_token
   end
