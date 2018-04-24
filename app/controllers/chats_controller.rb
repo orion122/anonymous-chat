@@ -30,7 +30,7 @@ class ChatsController < ApplicationController
 
     @random_chat = Chat.where(filled: false).order("RANDOM()").first
     @session = @random_chat.sessions.create(token: @session_token)
-    @random_chat.update_attribute(:filled, true)
+    @random_chat.update(filled: true)
 
     redirect_to action: "show", token: @random_chat.token, session_token: @session_token
   end
