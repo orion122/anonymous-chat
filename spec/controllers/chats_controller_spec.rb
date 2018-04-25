@@ -47,7 +47,6 @@ RSpec.describe ChatsController, type: :controller do
   describe "GET #show" do
     let(:chat)     { Chat.create(token: 12345) }
     let(:session)  { chat.sessions.create(token: 12345) }
-    let(:messages) { session.messages }
 
     it "assigns @chat" do
       get :show, params: { token: chat.token, session_token: session.token }
@@ -74,6 +73,23 @@ RSpec.describe ChatsController, type: :controller do
       post :create
       get :connect
       expect(Chat.first.filled).to eq(true)
+    end
+  end
+
+
+  describe "GET #messages" do
+    it "response JSON object" do
+      post :create
+      get :connect
+      Session.first.messages.create(message: 'abc')
+      Session.second.messages.create(message: 'yxz')
+      get :messages, params: { chat_token: assigns(:chat).token }
+
+      message1 = Session.first.messages
+      message2 = Session.second.messages
+
+      sorted_messages_json = (message1 + message2).sort_by(&:created_at).to_json
+      expect(response.body).to eq(sorted_messages_json)
     end
   end
 end
