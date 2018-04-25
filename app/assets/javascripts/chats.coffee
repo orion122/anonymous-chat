@@ -9,23 +9,15 @@ $(document).on 'keypress', '.input-box_text', (e) ->
     })
     e.target.value = ''
     e.preventDefault()
-
-    $.ajax({
-      url: "/chats/messages?chat_token=#{gon.chat_token}&session_token=#{gon.session_token}",
-      type: "GET"
-      success: (data) ->
-        allMessages = data.reduce(((init, messageObject) ->
-          init + "<p>#{messageObject.session_id}: #{messageObject.message}</p>"
-        ), '')
-
-        $messages = $("#messages")
-        $messages.html allMessages
-        $scroll = $('#messages-history')
-        $scroll.scrollTop($messages.prop("scrollHeight"))
-    });
+    getMessages()
 
 
 setInterval (->
+  getMessages()
+), 5000
+
+
+getMessages = () ->
   $.ajax({
     url: "/chats/messages?chat_token=#{gon.chat_token}&session_token=#{gon.session_token}",
     type: "GET"
@@ -39,4 +31,3 @@ setInterval (->
       $scroll = $('#messages-history')
       $scroll.scrollTop($messages.prop("scrollHeight"))
   });
-), 5000
