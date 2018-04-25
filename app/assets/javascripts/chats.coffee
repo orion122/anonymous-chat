@@ -9,4 +9,17 @@ $(document).on 'keypress', '.input-box_text', (e) ->
     })
     e.target.value = ''
     e.preventDefault()
-#    console.log(gon.sorted_messages)
+
+    $.ajax({
+      url: "/chats/messages?chat_token=#{gon.chat_token}&session_token=#{gon.session_token}",
+      type: "GET"
+      success: (data) ->
+        allMessages = data.reduce(((init, messageObject) ->
+          init + "<p>#{messageObject.message}</p>"
+        ), '')
+
+        $messages = $("#messages")
+        $messages.html allMessages
+        $scroll = $('#messages-history')
+        $scroll.scrollTop($messages.prop("scrollHeight"))
+    });
