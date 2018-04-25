@@ -15,7 +15,7 @@ $(document).on 'keypress', '.input-box_text', (e) ->
       type: "GET"
       success: (data) ->
         allMessages = data.reduce(((init, messageObject) ->
-          init + "<p>#{messageObject.message}</p>"
+          init + "<p>#{messageObject.session_id}: #{messageObject.message}</p>"
         ), '')
 
         $messages = $("#messages")
@@ -23,3 +23,20 @@ $(document).on 'keypress', '.input-box_text', (e) ->
         $scroll = $('#messages-history')
         $scroll.scrollTop($messages.prop("scrollHeight"))
     });
+
+
+setInterval (->
+  $.ajax({
+    url: "/chats/messages?chat_token=#{gon.chat_token}&session_token=#{gon.session_token}",
+    type: "GET"
+    success: (data) ->
+      allMessages = data.reduce(((init, messageObject) ->
+        init + "<p>#{messageObject.session_id}: #{messageObject.message}</p>"
+      ), '')
+
+      $messages = $("#messages")
+      $messages.html allMessages
+      $scroll = $('#messages-history')
+      $scroll.scrollTop($messages.prop("scrollHeight"))
+  });
+), 5000
