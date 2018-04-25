@@ -61,7 +61,7 @@ RSpec.describe ChatsController, type: :controller do
   end
 
 
-  describe "POST #connect" do
+  describe "GET #connect" do
     it "redirect to action show random chat" do
       post :create
       get :connect
@@ -70,9 +70,10 @@ RSpec.describe ChatsController, type: :controller do
                                       :session_token => assigns(:session).token
     end
 
-    it "creates a session with random token" do
+    it "sets @chat.filled to true" do
       post :create
-      expect(Session.find(1).token).to match(/[0-9a-zA-Z_-]{22}/)
+      get :connect
+      expect(Chat.first.filled).to eq(true)
     end
   end
 end
