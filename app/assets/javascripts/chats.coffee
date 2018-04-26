@@ -13,7 +13,8 @@ $(document).on 'keypress', '.input-box_text', (e) ->
 
 
 setInterval (->
-  getMessages()
+  if (window.location.pathname == "/chats/#{gon.chat_token}")
+    getMessages()
 ), 5000
 
 
