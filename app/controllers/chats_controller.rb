@@ -30,10 +30,15 @@ class ChatsController < ApplicationController
     gon.session_token = @session_token
 
     @random_chat = Chat.where(filled: false).order("RANDOM()").first
-    @session = @random_chat.sessions.create(token: @session_token)
-    @random_chat.update(filled: true)
 
-    redirect_to action: "show", token: @random_chat.token, session_token: @session_token
+    if @random_chat
+      @session = @random_chat.sessions.create(token: @session_token)
+      @random_chat.update(filled: true)
+      redirect_to action: "show", token: @random_chat.token, session_token: @session_token
+    else
+      flash[:alert] = "Пустых чатов нет. Создай свой."
+      redirect_to action: "welcome"
+    end
   end
 
 

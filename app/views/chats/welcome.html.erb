@@ -1,5 +1,9 @@
 <h1>Welcome</h1>
 
+<% flash.each do |key, message| %>
+  <p class="<%= key %>"><%= message %></p>
+<% end %>
+
 <%= form_for @chat, url: {action: "create"} do |f| %>
   <%= f.submit "Создать" %>
 <% end %>
