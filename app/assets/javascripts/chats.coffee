@@ -19,7 +19,7 @@ setInterval (->
 
 getMessages = () ->
   $.ajax({
-    url: "/chats/messages?chat_token=#{gon.chat_token}&session_token=#{gon.session_token}",
+    url: "/chats/messages?chat_token=#{gon.chat_token}",
     type: "GET"
     success: (data) ->
       allMessages = data.reduce(((init, messageObject) ->
