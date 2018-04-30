@@ -17,7 +17,7 @@ class ChatsController < ApplicationController
 
 
   def show
-    @chat = Chat.where(token: params[:token]).first
+    @chat = Chat.find_by(token: params[:token])
     @session_token = params[:session_token]
 
     gon.chat_token = @chat.token
@@ -29,7 +29,7 @@ class ChatsController < ApplicationController
     @session_token = SecureRandom.urlsafe_base64
     gon.session_token = @session_token
 
-    @random_chat = Chat.where(filled: false).order("RANDOM()").first
+    @random_chat = Chat.find_by(filled: false).order("RANDOM()")
 
     if @random_chat
       @session = @random_chat.sessions.create(token: @session_token)
@@ -43,7 +43,7 @@ class ChatsController < ApplicationController
 
 
   def messages
-    chat = Chat.where(token: params[:chat_token]).first
+    chat = Chat.find_by(token: params[:chat_token])
 
     render json: chat.messages
   end

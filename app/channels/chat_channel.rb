@@ -11,7 +11,7 @@ class ChatChannel < ApplicationCable::Channel
     session_token = data['session_token']
     message = data['message']
 
-    @session = Session.where(token: session_token).first
+    @session = Session.find_by(token: session_token)
     @session.messages.create(message: message)
   end
 end
