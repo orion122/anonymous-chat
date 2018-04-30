@@ -43,11 +43,8 @@ class ChatsController < ApplicationController
 
 
   def messages
-    @chat = Chat.where(token: params[:chat_token]).first
+    chat = Chat.where(token: params[:chat_token]).first
 
-    @messages_first_session = @chat.sessions.first.messages
-    @messages_second_session = @chat.sessions.second ? @chat.sessions.second.messages : []
-
-    render json: (@messages_first_session + @messages_second_session).sort_by(&:created_at)
+    render json: chat.messages
   end
 end
