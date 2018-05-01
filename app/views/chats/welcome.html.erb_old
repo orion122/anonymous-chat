@@ -1,0 +1,16 @@
+<h1>Welcome</h1>
+
+<% flash.each do |key, message| %>
+  <p class="<%= key %>"><%= message %></p>
+<% end %>
+
+<%= form_for @chat, url: {action: "create"} do |f| %>
+  <input type="hidden" name="session_token" id="session_token" value="<%= @session_token %>"/>
+  <%= f.submit "Создать" %>
+<% end %>
+
+<%= link_to 'Подключиться', chats_connect_path %>
+
+<script>
+    localStorage.setItem("session_token", "<%= @session_token %>");
+</script>
