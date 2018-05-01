@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   root 'chats#welcome'
 
-  get 'chats/connect' => 'chats#connect'
+  post 'chats/join_random' => 'chats#join_random'
 
   get 'chats/messages' => 'chats#messages'
 
