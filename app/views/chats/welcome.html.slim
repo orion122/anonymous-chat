@@ -1,0 +1,23 @@
+h1
+  | Welcome
+
+- flash.each do |type, message|
+  .type
+    = message
+
+
+= form_for(@chat) do |f|
+  input type="hidden" name="session_token" value=@session_token
+  = f.submit 'Создать чат'
+
+
+= form_tag(chats_join_random_path)
+  input type="hidden" name="session_token" value=@session_token
+  = submit_tag 'Подключиться к случайному чату'
+
+
+script
+  | localStorage.removeItem("session_token");
+  | localStorage.setItem("session_token", "
+  =@session_token
+  |");
