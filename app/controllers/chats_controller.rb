@@ -17,7 +17,6 @@ class ChatsController < ApplicationController
 
   def show
     @chat = Chat.find_by(token: params[:token])
-    # gon.chat_token = @chat.token
   end
 
 
@@ -25,13 +24,23 @@ class ChatsController < ApplicationController
     random_chat = Chat.where(filled: false).order("RANDOM()").first
 
     if random_chat
-      random_chat.sessions.create(token: params[:session_token])
+      random_chat.sessions.find_or_create_by(token: params[:session_token])
       random_chat.update(filled: true)
       redirect_to action: "show", token: random_chat.token
     else
-      flash[:alert] = "Пустых чатов нет. Создай свой."
+      flash[:alert] = "Пустые чаты отсутствуют. Создай свой."
       redirect_to action: "welcome"
     end
+  end
+
+
+  def save_message
+    session = Session.find_by(token: params[:session_token])
+    message = session.messages.new(message: params[:message])
+
+    status = 200 if message.save else 500
+
+    render json: { status: status }
   end
 
 

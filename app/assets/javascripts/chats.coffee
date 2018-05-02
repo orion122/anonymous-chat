@@ -3,7 +3,7 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 $(document).on 'keypress', '.input-box_text', (e) ->
   if e.keyCode == 13 and e.target.value
-    App.chat.reply({
+    saveMessage({
       'session_token': localStorage.getItem('session_token'),
       'message': e.target.value
     })
@@ -14,7 +14,6 @@ $(document).on 'keypress', '.input-box_text', (e) ->
 
 setInterval (->
   if (window.location.pathname == "/chats/#{getLastURLSegment(window.location.href)}")
-#  if (window.location.pathname == "/chats/#{gon.chat_token}")
     getMessages()
 ), 5000
 
@@ -22,7 +21,6 @@ setInterval (->
 getMessages = () ->
   $.ajax({
     url: "/chats/messages?chat_token=#{getLastURLSegment(window.location.href)}",
-#    url: "/chats/messages?chat_token=#{gon.chat_token}",
     type: "GET"
     success: (data) ->
       allMessages = data.reduce(((init, messageObject) ->
@@ -34,6 +32,17 @@ getMessages = () ->
       $scroll = $('#messages-history')
       $scroll.scrollTop($messages.prop("scrollHeight"))
   });
+
+
+saveMessage = (data) ->
+  $.post '/chats/save_message', {
+    'session_token': data['session_token'],
+    'message': data['message']
+  }, onAjaxSuccess
+
+
+onAjaxSuccess = (data) ->
+  console.log(data)
 
 
 getLastURLSegment = (url) ->

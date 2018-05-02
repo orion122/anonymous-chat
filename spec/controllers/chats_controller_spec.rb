@@ -38,8 +38,7 @@ RSpec.describe ChatsController, type: :controller do
     it "redirect to action show" do
       post :create
       expect(response).to redirect_to :action => :show,
-                                      :token => assigns(:chat).token,
-                                      :session_token => assigns(:session).token
+                                      :token => assigns(:chat).token
     end
   end
 
@@ -63,15 +62,14 @@ RSpec.describe ChatsController, type: :controller do
   describe "GET #connect" do
     it "redirect to action show random chat" do
       post :create
-      get :connect
+      get :join_random
       expect(response).to redirect_to :action => :show,
-                                      :token => assigns(:chat).token,
-                                      :session_token => assigns(:session).token
+                                      :token => assigns(:chat).token
     end
 
     it "sets @chat.filled to true" do
       post :create
-      get :connect
+      get :join_random
       expect(Chat.first.filled).to eq(true)
     end
   end
@@ -80,7 +78,7 @@ RSpec.describe ChatsController, type: :controller do
   describe "GET #messages" do
     it "response JSON object" do
       post :create
-      get :connect
+      get :join_random
       Session.first.messages.create(message: 'abc')
       Session.second.messages.create(message: 'yxz')
       get :messages, params: { chat_token: assigns(:chat).token }
