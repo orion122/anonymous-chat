@@ -13,14 +13,14 @@ $(document).on 'keypress', '.input-box_text', (e) ->
 
 
 setInterval (->
-  if (window.location.pathname == "/chats/#{getLastURLSegment(window.location.href)}")
+  if (window.location.pathname == "/chats/#{getChatToken(window.location.href)}")
     getMessages()
-), 5000
+), 15000
 
 
 getMessages = () ->
   $.ajax({
-    url: "/chats/messages?chat_token=#{getLastURLSegment(window.location.href)}",
+    url: "/chats/messages?chat_token=#{getChatToken(window.location.href)}",
     type: "GET"
     success: (data) ->
       allMessages = data.reduce(((init, messageObject) ->
@@ -38,12 +38,12 @@ saveMessage = (data) ->
   $.post '/chats/save_message', {
     'session_token': data['session_token'],
     'message': data['message']
-  }, onAjaxSuccess
+  }#, onMessageSaved
 
 
-onAjaxSuccess = (data) ->
-  console.log(data)
+#onMessageSaved = (data) ->
+#  console.log(data)
 
 
-getLastURLSegment = (url) ->
+getChatToken = (url) ->
   url.split('/').reverse()[0];
