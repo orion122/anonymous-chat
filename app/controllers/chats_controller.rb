@@ -9,9 +9,7 @@ class ChatsController < ApplicationController
     chat_token = SecureRandom.urlsafe_base64
 
     chat = Chat.create(token: chat_token)
-    puts "---------#{chat_token}---------"
-    puts "+++++#{chat.sessions.find_by(token: params[:session_token])}+++++"
-    chat.sessions.find_or_create_by(token: params[:session_token])
+    chat.sessions.create(token: params[:session_token])
 
     redirect_to action: "show", token: chat_token
   end
@@ -19,8 +17,6 @@ class ChatsController < ApplicationController
 
   def show
     @chat = Chat.find_by(token: params[:token])
-    #@sessions_tokens = @chat.sessions.reduce([]) {|result, session| result.push(session.token) }
-    #puts "=====#{@sessions_tokens}====="
   end
 
 
@@ -28,10 +24,7 @@ class ChatsController < ApplicationController
     random_chat = Chat.where(filled: false).order("RANDOM()").first
 
     if random_chat
-      puts "---------#{params[:session_token]}---------"
-      puts "+++++#{random_chat.sessions.find_by(token: params[:session_token])}+++++"
-      puts "*****#{random_chat.sessions.where(token: params[:session_token])}*****"
-      random_chat.sessions.find_or_create_by(token: params[:session_token])
+      random_chat.sessions.create(token: params[:session_token])
       random_chat.update(filled: true)
       redirect_to action: "show", token: random_chat.token
     else
@@ -48,7 +41,7 @@ class ChatsController < ApplicationController
     message.forward! if message.unsent?
     message.accept! if message.save
 
-    # render json: { state: message.state }
+    render json: { state: message.state }
   end
 
 
