@@ -15,12 +15,12 @@ $(document).on 'keypress', '.input-box_text', (e) ->
 setInterval (->
   if (window.location.pathname == "/chats/#{getChatToken(window.location.href)}")
     getMessages()
-), 15000
+), 99995000
 
 
 getMessages = () ->
   $.ajax({
-    url: "/chats/messages?chat_token=#{getChatToken(window.location.href)}",
+    url: "/chats/#{getChatToken(window.location.href)}/messages",
     type: "GET"
     success: (data) ->
       allMessages = data.reduce(((init, messageObject) ->
@@ -35,7 +35,7 @@ getMessages = () ->
 
 
 saveMessage = (data) ->
-  $.post '/chats/save_message', {
+  $.post "/chats/#{getChatToken(window.location.href)}/messages", {
     'session_token': data['session_token'],
     'message': data['message']
   }#, onMessageSaved

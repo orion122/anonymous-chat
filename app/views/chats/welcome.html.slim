@@ -11,7 +11,7 @@ h1
   = f.submit 'Создать чат'
 
 
-= form_tag(chats_join_random_path)
+= form_tag(join_random_chats_path)
   input type="hidden" name="session_token" value=@session_token
   = submit_tag 'Подключиться к случайному чату'
 

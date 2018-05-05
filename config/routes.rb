@@ -1,14 +1,11 @@
 Rails.application.routes.draw do
   root 'chats#welcome'
 
-  post 'chats/join_random' => 'chats#join_random'
+  resources :chats, only: [:create, :show], param: :token do
+    collection do
+      post :join_random
+    end
 
-  post 'chats/save_message' => 'chats#save_message'
-
-  get 'chats/messages' => 'chats#messages'
-
-  get 'chats/:token' => 'chats#show'
-
-  resources :chats
-
+    resources :messages, only: [:index, :create]
+  end
 end
