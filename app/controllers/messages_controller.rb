@@ -5,7 +5,7 @@ class MessagesController < ApplicationController
 
     if chat_has_session(chat, session_token)
       chat_messages = chat.messages
-      chat_messages.map{ |message| message.deliver! if message.accepted? }
+      chat_messages.map{ |message| message.deliver! if message.accepted? and message.session.token != session_token }
       render json: chat.messages
     else
       render json: { 'permission': 'false' }

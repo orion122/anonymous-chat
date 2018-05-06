@@ -26,7 +26,7 @@ getMessages = () ->
       request.setRequestHeader 'X-Auth-Token', localStorage.getItem('session_token')
     success: (data) ->
       allMessages = data.reduce(((init, messageObject) ->
-        init + "<p>#{messageObject.session_id}: #{messageObject.message}</p>"
+        init + "<p>#{messageObject.session_id}: #{messageObject.message} (#{messageObject.state})</p>"
       ), '')
 
       $messages = $("#messages")
