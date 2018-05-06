@@ -22,6 +22,8 @@ getMessages = () ->
   $.ajax({
     url: "/chats/#{getChatToken(window.location.href)}/messages",
     type: "GET"
+    beforeSend: (request) ->
+      request.setRequestHeader 'X-Auth-Token', localStorage.getItem('session_token')
     success: (data) ->
       allMessages = data.reduce(((init, messageObject) ->
         init + "<p>#{messageObject.session_id}: #{messageObject.message}</p>"
@@ -35,14 +37,13 @@ getMessages = () ->
 
 
 saveMessage = (data) ->
-  $.post "/chats/#{getChatToken(window.location.href)}/messages", {
-    'session_token': data['session_token'],
-    'message': data['message']
-  }#, onMessageSaved
-
-
-#onMessageSaved = (data) ->
-#  console.log(data)
+  $.ajax({
+    url: "/chats/#{getChatToken(window.location.href)}/messages",
+    type: "POST"
+    beforeSend: (request) ->
+      request.setRequestHeader 'X-Auth-Token', localStorage.getItem('session_token')
+    data: { 'message': data['message'] }
+  });
 
 
 getChatToken = (url) ->
