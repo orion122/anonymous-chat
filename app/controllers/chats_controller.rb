@@ -29,7 +29,7 @@ class ChatsController < ApplicationController
       random_chat.update(filled: true)
       redirect_to action: "show", token: random_chat.token
     else
-      flash[:alert] = "Пустые чаты отсутствуют. Создай свой."
+      flash[:alert] = t('flash.alert')
       redirect_to action: "welcome"
     end
   end

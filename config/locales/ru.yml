@@ -31,8 +31,8 @@
 
 en:
   root:
-    welcome: "Welcome"
-    create_chat: "Create chat"
-    join_random_chat: "Join а random chat"
+    welcome: "Добро пожаловать"
+    create_chat: "Создать чат"
+    join_random_chat: "Присоединиться к случайному чату"
   flash:
-    alert: "Empty chats are missing. Create your own."
+    alert: "Пустые чаты отсутствуют. Создай свой."

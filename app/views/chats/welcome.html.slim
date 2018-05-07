@@ -1,5 +1,5 @@
 h1
-  | Welcome
+  = t('root.welcome')
 
 - flash.each do |type, message|
   .type
@@ -8,12 +8,12 @@ h1
 
 = form_for(@chat) do |f|
   input type="hidden" name="session_token" value=@session_token
-  = f.submit 'Создать чат'
+  = f.submit t('root.create_chat')
 
 
 = form_tag(join_random_chats_path)
   input type="hidden" name="session_token" value=@session_token
-  = submit_tag 'Подключиться к случайному чату'
+  = submit_tag t('root.join_random_chat')
 
 
 script
