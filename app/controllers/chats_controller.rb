@@ -16,8 +16,8 @@ class ChatsController < ApplicationController
 
 
   def show
-    @chat = Chat.find_by(token: params[:token])
-    @sessions_tokens = @chat.sessions.pluck(:token)
+    # @chat = Chat.find_by(token: params[:token])
+    # @sessions_tokens = @chat.sessions.pluck(:token)
   end
 
 
