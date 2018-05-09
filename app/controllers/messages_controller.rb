@@ -25,7 +25,7 @@ class MessagesController < ApplicationController
       message.forward! if message.unsent?
       message.accept! if message.save
 
-      render json: { 'state': message.state }
+      #render json: { 'state': message.state }
     else
       render json: { 'permission': 'false' }
     end

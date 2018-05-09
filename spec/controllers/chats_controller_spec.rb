@@ -89,21 +89,4 @@ RSpec.describe ChatsController, type: :controller do
       expect(flash[:alert]).to eq(I18n.t('flash.alert'))
     end
   end
-
-
-  describe "GET #messages" do
-    # it "response JSON object" do
-    #   post :create
-    #   get :join_random
-    #   Session.first.messages.create(message: 'abc')
-    #   Session.second.messages.create(message: 'yxz')
-    #   get :messages, params: { chat_token: assigns(:chat).token }
-    #
-    #   message1 = Session.first.messages
-    #   message2 = Session.second.messages
-    #
-    #   sorted_messages_json = (message1 + message2).sort_by(&:created_at).to_json
-    #   expect(response.body).to eq(sorted_messages_json)
-    # end
-  end
 end
