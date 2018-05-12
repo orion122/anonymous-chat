@@ -1,9 +1,5 @@
 require 'rails_helper'
 
-RSpec.configure do |config|
-  config.include FactoryBot::Syntax::Methods
-end
-
 RSpec.describe ChatsController, type: :controller do
   describe "GET #welcome" do
     before { get :welcome }
