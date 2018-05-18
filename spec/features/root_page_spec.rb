@@ -1,47 +1,44 @@
 require 'rails_helper'
 
+RSpec.configure do |config|
+  config.include FactoryBot::Syntax::Methods
+end
+
 RSpec.feature "Visiting the root page", type: :feature do
+  before { visit root_path }
   scenario "The visitor should see a 'Welcome'" do
-    visit root_path
-    page.has_content?('Welcome')
+    page.has_content?(I18n.t('root.welcome'))
   end
 
-  scenario "The visitor should see a link 'Подключиться'" do
-    visit root_path
-    find_link('Подключиться', href: '/chats/connect')
+  scenario "The visitor should see a button 'Join random chat'" do
+    page.has_xpath?("input[type=submit][value='#{I18n.t('root.join_random_chat')}']")
   end
 
-  scenario "The visitor should see a button 'Создать'" do
-    visit root_path
-    page.has_xpath?("input[type=submit][value='Создать']")
+  scenario "The visitor should see a button 'Create chat'" do
+    page.has_xpath?("input[type=submit][value='#{I18n.t('root.create_chat')}']")
   end
 
-  scenario "The visitor should see a chat's page after clicking the button 'Создать" do
-    visit root_path
-    click_button('Создать')
+  scenario "The visitor should see a chat's page after clicking the button 'Create chat'" do
+    click_button(I18n.t('root.create_chat'))
     chat = Chat.first
-    session = chat.sessions.first
-    expect(page).to have_current_path(chat_path(chat.token, session_token: session.token))
+    expect(page).to have_current_path(chat_path(chat.token))
   end
 
-  scenario "The visitor should see a chat's page after clicking the link 'Подключиться'" do
-    visit root_path
-    Chat.create(token: 12345)
-    click_link('Подключиться')
+  scenario "The visitor should see a chat's page after clicking the button 'Join random chat'" do
+    create(:chat)
+    click_button(I18n.t('root.join_random_chat'))
     chat = Chat.first
-    session = chat.sessions.first
-    expect(page).to have_current_path(chat_path(chat.token, session_token: session.token))
+    expect(page).to have_current_path(chat_path(chat.token))
   end
 
-  scenario "Page should has input type='text' after clicking the button 'Создать'" do
-    visit root_path
-    click_button('Создать')
+  scenario "Page should has input type='text' after clicking the button 'Create chat'" do
+    click_button(I18n.t('root.create_chat'))
     page.has_xpath?("//input[@type='text'][class='input-box_text']")
   end
 
-  scenario "Page should has input type='text' clicking the link 'Подключиться'" do
-    visit root_path
-    click_button('Создать')
+  scenario "Page should has input type='text' after clicking the button 'Join random chat'" do
+    create(:chat)
+    click_button(I18n.t('root.join_random_chat'))
     page.has_xpath?("//input[@type='text'][class='input-box_text']")
   end
 end

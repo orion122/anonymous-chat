@@ -30,4 +30,9 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  root:
+    welcome: "Welcome"
+    create_chat: "Create chat"
+    join_random_chat: "Join а random chat"
+  flash:
+    alert: "Empty chats are missing. Create your own."

@@ -3,8 +3,8 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 $(document).on 'keypress', '.input-box_text', (e) ->
   if e.keyCode == 13 and e.target.value
-    App.chat.reply({
-      'session_token': gon.session_token,
+    saveMessage({
+      'session_token': localStorage.getItem('session_token'),
       'message': e.target.value
     })
     e.target.value = ''
@@ -13,18 +13,20 @@ $(document).on 'keypress', '.input-box_text', (e) ->
 
 
 setInterval (->
-  if (window.location.pathname == "/chats/#{gon.chat_token}")
+  if (window.location.pathname == "/chats/#{getChatToken(window.location.href)}")
     getMessages()
-), 5000
+), 99995000
 
 
 getMessages = () ->
   $.ajax({
-    url: "/chats/messages?chat_token=#{gon.chat_token}",
+    url: "/chats/#{getChatToken(window.location.href)}/messages",
     type: "GET"
+    beforeSend: (request) ->
+      request.setRequestHeader 'X-Auth-Token', localStorage.getItem('session_token')
     success: (data) ->
       allMessages = data.reduce(((init, messageObject) ->
-        init + "<p>#{messageObject.session_id}: #{messageObject.message}</p>"
+        init + "<p>#{messageObject.session_id}: #{messageObject.message} (#{messageObject.state})</p>"
       ), '')
 
       $messages = $("#messages")
@@ -32,3 +34,17 @@ getMessages = () ->
       $scroll = $('#messages-history')
       $scroll.scrollTop($messages.prop("scrollHeight"))
   });
+
+
+saveMessage = (data) ->
+  $.ajax({
+    url: "/chats/#{getChatToken(window.location.href)}/messages",
+    type: "POST"
+    beforeSend: (request) ->
+      request.setRequestHeader 'X-Auth-Token', localStorage.getItem('session_token')
+    data: { 'message': data['message'] }
+  });
+
+
+getChatToken = (url) ->
+  url.split('/').reverse()[0];

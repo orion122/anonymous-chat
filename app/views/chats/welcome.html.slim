@@ -1,0 +1,23 @@
+h1
+  = t('root.welcome')
+
+- flash.each do |type, message|
+  .type
+    = message
+
+
+= form_for(@chat) do |f|
+  input type="hidden" name="session_token" value=@session_token
+  = f.submit t('root.create_chat')
+
+
+= form_tag(join_random_chats_path)
+  input type="hidden" name="session_token" value=@session_token
+  = submit_tag t('root.join_random_chat')
+
+
+script
+  | localStorage.removeItem("session_token");
+  | localStorage.setItem("session_token", "
+  =@session_token
+  |");

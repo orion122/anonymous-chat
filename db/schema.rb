@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180424062409) do
+ActiveRecord::Schema.define(version: 20180504071058) do
 
   create_table "chats", force: :cascade do |t|
     t.string "token"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 20180424062409) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "session_id"
+    t.string "state"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -32,7 +33,6 @@ ActiveRecord::Schema.define(version: 20180424062409) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "chat_id"
-    t.index ["token"], name: "index_sessions_on_token", unique: true
   end
 
 end
