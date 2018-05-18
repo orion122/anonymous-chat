@@ -6,10 +6,10 @@ RSpec.describe MessagesController, type: :controller do
     let(:session)  { create(:session, chat: chat) }
     let(:text)     { 'some text' }
 
-    before {
+    before do
       request.headers['X-Auth-Token'] = session.token
       post :create, params: { chat_token: chat.token, message: text }
-    }
+    end
 
     it "creates a one message" do
       expect(Message.count).to eq(1)
@@ -33,10 +33,10 @@ RSpec.describe MessagesController, type: :controller do
     let(:chat)     { create(:chat) }
     let(:text)     { 'some text' }
 
-    before {
+    before do
       request.headers['X-Auth-Token'] = "123"
       post :create, params: { chat_token: chat.token, message: text }
-    }
+    end
 
     it "doesn't create a message" do
       expect(Message.count).to eq(0)
@@ -50,11 +50,11 @@ RSpec.describe MessagesController, type: :controller do
     let(:session2) { create(:session, chat: chat) }
     let(:text)     { 'some text' }
 
-    before {
+    before do
       request.headers['X-Auth-Token'] = session1.token
       post :create, params: { chat_token: chat.token, message: text }
       get :index, params:   { chat_token: chat.token }
-    }
+    end
 
     it "return message" do
       expect(response.body).to eq(chat.messages.to_json)
@@ -72,13 +72,13 @@ RSpec.describe MessagesController, type: :controller do
     let(:session2) { create(:session, chat: chat) }
     let(:text)     { 'some text' }
 
-    before {
+    before do
       request.headers['X-Auth-Token'] = session1.token
       post :create, params: { chat_token: chat.token, message: text }
 
       request.headers['X-Auth-Token'] = session2.token
       get :index, params:   { chat_token: chat.token }
-    }
+    end
 
     it "return message" do
       expect(response.body).to eq(chat.messages.to_json)

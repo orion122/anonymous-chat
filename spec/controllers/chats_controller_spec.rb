@@ -56,10 +56,10 @@ RSpec.describe ChatsController, type: :controller do
 
 
   describe "POST #join_random, when an empty chat exists" do
-    before {
+    before do
       post :create, params: { session_token: SecureRandom.urlsafe_base64 }
       post :join_random, params: { session_token: SecureRandom.urlsafe_base64 }
-    }
+    end
 
   it "redirect to action show random chat" do
       expect(response).to redirect_to action: :show,
