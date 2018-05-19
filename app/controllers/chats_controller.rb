@@ -1,12 +1,12 @@
 class ChatsController < ApplicationController
   def welcome
-    @session_token = SecureRandom.urlsafe_base64
+    @session_token = SecureRandom.uuid
     @chat = Chat.new
   end
 
 
   def create
-    chat_token = SecureRandom.urlsafe_base64
+    chat_token = SecureRandom.uuid
 
     chat = Chat.create(token: chat_token)
     chat.sessions.create(token: params[:session_token])
