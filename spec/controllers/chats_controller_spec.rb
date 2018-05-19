@@ -2,15 +2,11 @@ require 'rails_helper'
 
 RSpec.describe ChatsController, type: :controller do
   describe "GET #welcome" do
-    before { get :welcome }
+    subject { get :welcome }
 
-    it "response success" do
-      expect(response).to be_success
-    end
+    it { is_expected.to be_success }
 
-    it "render view welcome" do
-      expect(response).to render_template(:welcome)
-    end
+    it { is_expected.to render_template(:welcome) }
   end
 
 
@@ -31,7 +27,7 @@ RSpec.describe ChatsController, type: :controller do
     end
 
     it "creates a session with random token" do
-      post :create, params: { session_token: SecureRandom.urlsafe_base64 }
+      post :create, params: { session_token: SecureRandom.uuid }
       expect(Session.first.token).not_to eq(Session.second.token)
     end
 
@@ -47,21 +43,19 @@ RSpec.describe ChatsController, type: :controller do
   describe "GET #show" do
     let(:chat)     { create(:chat) }
 
-    before { get :show, params: { token: chat.token } }
+    subject { get :show, params: { token: chat.token } }
 
-    it "render view show" do
-      expect(response).to render_template('show')
-    end
+    it { is_expected.to render_template(:show) }
   end
 
 
   describe "POST #join_random, when an empty chat exists" do
     before do
-      post :create, params: { session_token: SecureRandom.urlsafe_base64 }
-      post :join_random, params: { session_token: SecureRandom.urlsafe_base64 }
+      post :create, params: { session_token: SecureRandom.uuid }
+      post :join_random, params: { session_token: SecureRandom.uuid }
     end
 
-  it "redirect to action show random chat" do
+    it "redirect to action show random chat" do
       expect(response).to redirect_to action: :show,
                                       token: Chat.first.token
     end
@@ -75,7 +69,7 @@ RSpec.describe ChatsController, type: :controller do
 
 
   describe "POST #join_random, when an empty chat doesn't exist" do
-    before { post :join_random, params: { session_token: SecureRandom.urlsafe_base64 } }
+    before { post :join_random, params: { session_token: SecureRandom.uuid } }
 
     it "redirect to action welcome" do
       expect(response).to redirect_to action: :welcome

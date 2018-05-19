@@ -33,18 +33,14 @@ RSpec.describe MessagesController, type: :controller do
     let(:chat)     { create(:chat) }
     let(:text)     { 'some text' }
 
-    before do
+    subject do
       request.headers['X-Auth-Token'] = "123"
       post :create, params: { chat_token: chat.token, message: text }
     end
 
-    it "doesn't create a message" do
-      expect(Message.count).to eq(0)
-    end
+    it { expect{ subject }.not_to change{ Message.count }.from(0) }
 
-    it "return status 500" do
-      expect(response).to have_http_status(500)
-    end
+    it { is_expected.to have_http_status(500) }
   end
 
 
