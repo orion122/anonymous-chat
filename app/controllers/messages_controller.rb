@@ -14,7 +14,7 @@ class MessagesController < ApplicationController
 
       render json: chat.messages
     else
-      render json: { 'permission': 'false' }
+      render body: nil, status: 403
     end
   end
 
@@ -29,10 +29,8 @@ class MessagesController < ApplicationController
       message = session.messages.new(message: params[:message])
 
       message.accept! if message.save
-
-      #render json: { 'state': message.state }
     else
-      render json: { 'permission': 'false' }
+      render body: nil, status: 500
     end
   end
 
