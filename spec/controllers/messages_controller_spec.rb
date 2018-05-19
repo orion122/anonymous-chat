@@ -41,6 +41,10 @@ RSpec.describe MessagesController, type: :controller do
     it "doesn't create a message" do
       expect(Message.count).to eq(0)
     end
+
+    it "return status 500" do
+      expect(response).to have_http_status(500)
+    end
   end
 
 
@@ -86,6 +90,29 @@ RSpec.describe MessagesController, type: :controller do
 
     it "message state is delivered" do
       expect(Message.first.state).to eq('delivered')
+    end
+  end
+
+
+  describe "GET #messages with invalid session token in header" do
+    let(:chat)     { create(:chat) }
+    let(:session1) { create(:session, chat: chat) }
+    let(:text)     { 'some text' }
+
+    before do
+      request.headers['X-Auth-Token'] = session1.token
+      post :create, params: { chat_token: chat.token, message: text }
+
+      request.headers['X-Auth-Token'] = '123'
+      get :index, params:   { chat_token: chat.token }
+    end
+
+    it "return status 403" do
+      expect(response).to have_http_status(403)
+    end
+
+    it "message state is accepted" do
+      expect(Message.first.state).to eq('accepted')
     end
   end
 end
