@@ -28,7 +28,6 @@ class MessagesController < ApplicationController
       session = Session.find(session_id)
       message = session.messages.new(message: params[:message])
 
-      message.forward! if message.unsent?
       message.accept! if message.save
 
       #render json: { 'state': message.state }
@@ -39,7 +38,7 @@ class MessagesController < ApplicationController
 
 
   private
-  def chat_has_session (chat, session_token)
-    chat.sessions.where(token: session_token).exists?
-  end
+    def chat_has_session (chat, session_token)
+      chat.sessions.where(token: session_token).exists?
+    end
 end
