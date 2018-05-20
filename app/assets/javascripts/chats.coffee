@@ -15,7 +15,7 @@ $(document).on 'keypress', '.input-box_text', (e) ->
 setInterval (->
   if (window.location.pathname == "/chats/#{getChatToken(window.location.href)}")
     getMessages()
-), 9995000
+), 5000
 
 
 getMessages = () ->
