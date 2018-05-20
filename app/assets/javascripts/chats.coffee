@@ -46,5 +46,11 @@ saveMessage = (data) ->
   });
 
 
+$(window).on 'load', ->
+  if (window.location.pathname == "/")
+    localStorage.removeItem('session_token');
+    localStorage.setItem('session_token', gon.session_token);
+
+
 getChatToken = (url) ->
   url.split('/').reverse()[0];
