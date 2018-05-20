@@ -111,4 +111,24 @@ RSpec.describe Chats::MessagesController, type: :controller do
       expect(Message.first.state).to eq('accepted')
     end
   end
+
+
+  describe "set state 'read'" do
+    let(:chat)     { create(:chat) }
+    let(:session1) { create(:session, chat: chat) }
+    let(:session2) { create(:session, chat: chat) }
+    let(:message)  { create(:message, state: 'delivered', session: session1) }
+
+    before do
+      request.headers['X-Auth-Token'] = session1.token
+      post :create, params: { chat_token: chat.token, message: message }
+
+      request.headers['X-Auth-Token'] = session2.token
+      post :create, params: { chat_token: chat.token, setStateRead: true }
+    end
+
+    it "message state is 'read'" do
+      expect(Message.first.state).to eq('read')
+    end
+  end
 end
