@@ -25,15 +25,11 @@ getMessages = () ->
     beforeSend: (request) ->
       request.setRequestHeader 'X-Auth-Token', localStorage.getItem('session_token')
     success: (data) ->
-#      messagesIds = data.reduce(((ids, messageObject) ->
-#        ids.push(messageObject.id)
-#        return ids
-#      ), [])
       allMessages = data.reduce(((init, messageObject) ->
         init + "<p>#{messageObject.session_id}: #{messageObject.message} (#{messageObject.state})</p>"
       ), '')
       renderMessages(allMessages)
-      setStateRead()
+      setStateRead
   });
 
 
