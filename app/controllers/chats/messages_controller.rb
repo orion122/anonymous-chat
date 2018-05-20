@@ -18,11 +18,15 @@ class Chats::MessagesController < Chats::ApplicationController
 
   def create
     if chat_has_session(chat, session_token)
-      session_id = chat.sessions.find_by(token: session_token).id
-      session = Session.find(session_id)
-      message = session.messages.new(message: params[:message])
+      if params[:setStateRead]
+        set_state_read(chat.messages)
+      else
+        session_id = chat.sessions.find_by(token: session_token).id
+        session = Session.find(session_id)
+        message = session.messages.new(message: params[:message])
 
-      message.accept! if message.save
+        message.accept! if message.save
+      end
     else
       render body: nil, status: 500
     end
@@ -32,5 +36,13 @@ class Chats::MessagesController < Chats::ApplicationController
   private
     def chat_has_session (chat, session_token)
       chat.sessions.where(token: session_token).exists?
+    end
+
+    def set_state_read(messages)
+      messages.find_each do |message|
+        if message.delivered? and message.session.token != session_token
+          message.read!
+        end
+      end
     end
 end

@@ -15,7 +15,7 @@ $(document).on 'keypress', '.input-box_text', (e) ->
 setInterval (->
   if (window.location.pathname == "/chats/#{getChatToken(window.location.href)}")
     getMessages()
-), 99995000
+), 9995000
 
 
 getMessages = () ->
@@ -25,15 +25,33 @@ getMessages = () ->
     beforeSend: (request) ->
       request.setRequestHeader 'X-Auth-Token', localStorage.getItem('session_token')
     success: (data) ->
+#      messagesIds = data.reduce(((ids, messageObject) ->
+#        ids.push(messageObject.id)
+#        return ids
+#      ), [])
       allMessages = data.reduce(((init, messageObject) ->
         init + "<p>#{messageObject.session_id}: #{messageObject.message} (#{messageObject.state})</p>"
       ), '')
-
-      $messages = $("#messages")
-      $messages.html allMessages
-      $scroll = $('#messages-history')
-      $scroll.scrollTop($messages.prop("scrollHeight"))
+      renderMessages(allMessages)
+      setStateRead()
   });
+
+
+setStateRead = () ->
+  $.ajax({
+    url: "/chats/#{getChatToken(window.location.href)}/messages",
+    type: "POST"
+    beforeSend: (request) ->
+      request.setRequestHeader 'X-Auth-Token', localStorage.getItem('session_token')
+    data: { 'setStateRead': true }
+  });
+
+
+renderMessages = (messages) ->
+  $messages = $("#messages")
+  $messages.html messages
+  $scroll = $('#messages-history')
+  $scroll.scrollTop($messages.prop("scrollHeight"))
 
 
 saveMessage = (data) ->
