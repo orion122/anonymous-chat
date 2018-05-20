@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe MessagesController, type: :controller do
+RSpec.describe Chats::MessagesController, type: :controller do
   describe "POST #messages with valid session token in header" do
     let(:chat)     { create(:chat) }
     let(:session)  { create(:session, chat: chat) }

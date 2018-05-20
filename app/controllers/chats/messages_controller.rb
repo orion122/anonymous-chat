@@ -1,8 +1,5 @@
-class MessagesController < ApplicationController
+class Chats::MessagesController < Chats::ApplicationController
   def index
-    chat = Chat.find_by(token: params[:chat_token])
-    session_token = request.headers["X-Auth-Token"]
-
     if chat_has_session(chat, session_token)
       chat_messages = chat.messages
 
@@ -20,9 +17,6 @@ class MessagesController < ApplicationController
 
 
   def create
-    chat = Chat.find_by(token: params[:chat_token])
-    session_token = request.headers["X-Auth-Token"]
-
     if chat_has_session(chat, session_token)
       session_id = chat.sessions.find_by(token: session_token).id
       session = Session.find(session_id)

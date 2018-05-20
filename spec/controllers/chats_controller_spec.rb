@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ChatsController, type: :controller do
+RSpec.describe Chats::ChatsController, type: :controller do
   describe "GET #welcome" do
     subject { get :welcome }
 
@@ -11,7 +11,7 @@ RSpec.describe ChatsController, type: :controller do
 
 
   describe "POST #create" do
-    before { post :create, params: { session_token: SecureRandom.urlsafe_base64 } }
+    before { post :create, params: { session_token: SecureRandom.uuid } }
 
     it "creates a one chat" do
       expect(Chat.count).to eq(1)

@@ -1,6 +1,7 @@
-class ChatsController < ApplicationController
+class Chats::ChatsController < Chats::ApplicationController
   def welcome
-    gon.session_token = SecureRandom.uuid
+    @session_token = SecureRandom.uuid
+    gon.session_token = @session_token
     @chat = Chat.new
   end
 
