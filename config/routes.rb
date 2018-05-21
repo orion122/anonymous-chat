@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-
-  scope module: :chats do
       root 'chats#welcome'
 
       resources :chats, only: [:create, :show], param: :token do
@@ -8,6 +6,7 @@ Rails.application.routes.draw do
           post :join_random
         end
 
+        scope module: :chats do
         resources :messages, only: [:index, :create]
       end
   end
