@@ -4,7 +4,7 @@ RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
 end
 
-RSpec.feature "Visiting the root page", type: :feature do
+RSpec.feature 'Visiting the root page', type: :feature do
   before { visit root_path }
   scenario "The visitor should see a 'Welcome'" do
     page.has_content?(I18n.t('root.welcome'))

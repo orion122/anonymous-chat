@@ -5,19 +5,19 @@ class Message < ApplicationRecord
 
   aasm column: 'state' do
     state :initial, initial: true
-    state :accepted              # принято    (сервером)
-    state :delivered             # доставлено (собеседнику)
-    state :read                  # прочитано  (собеседником)
+    state :accepted
+    state :delivered
+    state :read
 
-    event :accept do             # принять    (сервером)
+    event :accept do
       transitions from: :initial, to: :accepted
     end
 
-    event :deliver do            # доставить  (собеседнику)
+    event :deliver do
       transitions from: :accepted, to: :delivered
     end
 
-    event :read do               # прочитать  (собеседником)
+    event :read do
       transitions from: :delivered, to: :read
     end
   end

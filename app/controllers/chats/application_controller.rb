@@ -1,6 +1,6 @@
 class Chats::ApplicationController < ApplicationController
   def session_token
-    request.headers["X-Auth-Token"]
+    request.headers['X-Auth-Token']
   end
 
   def chat
