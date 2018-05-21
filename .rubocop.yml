@@ -1,0 +1,29 @@
+AllCops:
+  Exclude:
+    - 'db/**/*'
+    - 'config/**/*'
+    - 'bin/**/*'
+    - 'Gemfile'
+    - 'spec/spec_helper.rb'
+    - 'spec/rails_helper.rb'
+
+Rails:
+  Enabled: true
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Metrics/LineLength:
+  Max: 120
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
