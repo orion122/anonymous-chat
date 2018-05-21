@@ -29,7 +29,7 @@ getMessages = () ->
         init + "<p>#{messageObject.session_id}: #{messageObject.message} (#{messageObject.state})</p>"
       ), '')
       renderMessages(allMessages)
-      setStateRead
+      setStateRead()
   });
 
 
