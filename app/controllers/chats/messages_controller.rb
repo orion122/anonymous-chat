@@ -4,7 +4,9 @@ class Chats::MessagesController < Chats::ApplicationController
       chat_messages = chat.messages
 
       chat_messages.find_each do |message|
-        message.deliver! if message.accepted? && message.session.token != session_token
+        if message.accepted? && message.session.token != session_token
+          message.deliver!
+        end
       end
 
       render json: chat.messages
@@ -37,7 +39,9 @@ class Chats::MessagesController < Chats::ApplicationController
 
   def state_read(messages)
     messages.find_each do |message|
-      message.read! if message.delivered? && message.session.token != session_token
+      if message.delivered? && message.session.token != session_token
+        message.read!
+      end
     end
   end
 end
