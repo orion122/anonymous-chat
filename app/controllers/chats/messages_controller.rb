@@ -1,13 +1,8 @@
 class Chats::MessagesController < Chats::ApplicationController
   def index
     if chat_has_session(chat, session_token)
-      chat_messages = chat.messages
 
-      chat_messages.find_each do |message|
-        if message.accepted? && message.session.token != session_token
-          message.deliver!
-        end
-      end
+      change_state(chat.messages, :accepted?, :deliver!)
 
       render json: chat.messages
     else
@@ -18,7 +13,7 @@ class Chats::MessagesController < Chats::ApplicationController
   def create
     if chat_has_session(chat, session_token)
       if params[:setStateRead]
-        state_read(chat.messages)
+        change_state(chat.messages, :delivered?, :read!)
       else
         session_id = chat.sessions.find_by(token: session_token).id
         session = Session.find(session_id)
@@ -37,10 +32,10 @@ class Chats::MessagesController < Chats::ApplicationController
     chat.sessions.where(token: session_token).exists?
   end
 
-  def state_read(messages)
+  def change_state(messages, from_state, to_state)
     messages.find_each do |message|
-      if message.delivered? && message.session.token != session_token
-        message.read!
+      if message.send(from_state) && message.session.token != session_token
+        message.send(to_state)
       end
     end
   end
