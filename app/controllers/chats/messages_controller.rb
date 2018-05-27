@@ -10,10 +10,10 @@ class Chats::MessagesController < Chats::ApplicationController
 
   def create
     if chat_has_session(chat, session_token)
-    session_id = chat.sessions.find_by(token: session_token).id
-    session = Session.find(session_id)
-    message = session.messages.new(message: params[:message])
-    message.accept! if message.save
+      session_id = chat.sessions.find_by(token: session_token).id
+      session = Session.find(session_id)
+      message = session.messages.new(message: params[:message])
+      message.accept! if message.save
     else
       render body: nil, status: :internal_server_error
     end
