@@ -10,11 +10,13 @@ $(document).on 'keypress', '.input-box_text', (e) ->
     e.target.value = ''
     e.preventDefault()
     getMessages()
+    setStateRead()
 
 
 setInterval (->
   if (window.location.pathname == "/chats/#{getChatToken(window.location.href)}")
     getMessages()
+    setStateRead()
 ), 5000
 
 
@@ -29,7 +31,6 @@ getMessages = () ->
         init + "<p>#{messageObject.session_id}: #{messageObject.message} (#{messageObject.state})</p>"
       ), '')
       renderMessages(allMessages)
-      setStateRead()
   });
 
 
