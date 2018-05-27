@@ -39,7 +39,7 @@ RSpec.describe Chats::MessagesController, type: :controller do
 
     it { expect { subject }.not_to change { Message.count }.from(0) }
 
-    it { is_expected.to have_http_status(500) }
+    it { is_expected.to have_http_status(403) }
   end
 
   describe "GET #messages with owner's session token in header" do
