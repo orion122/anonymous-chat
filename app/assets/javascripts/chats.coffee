@@ -36,11 +36,10 @@ getMessages = () ->
 
 setStateRead = () ->
   $.ajax({
-    url: "/chats/#{getChatToken(window.location.href)}/messages",
+    url: "/chats/#{getChatToken(window.location.href)}/messages/set_state_read",
     type: "POST"
     beforeSend: (request) ->
       request.setRequestHeader 'X-Auth-Token', localStorage.getItem('session_token')
-    data: { 'setStateRead': true }
   });
 
 

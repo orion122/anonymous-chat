@@ -7,7 +7,11 @@ Rails.application.routes.draw do
     end
 
     scope module: :chats do
-      resources :messages, only: [:index, :create]
+      resources :messages, only: [:index, :create] do
+        collection do
+          post :set_state_read
+        end
+      end
     end
   end
 end

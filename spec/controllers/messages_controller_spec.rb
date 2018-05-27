@@ -119,7 +119,7 @@ RSpec.describe Chats::MessagesController, type: :controller do
       post :create, params: { chat_token: chat.token, message: message }
 
       request.headers['X-Auth-Token'] = session2.token
-      post :create, params: { chat_token: chat.token, setStateRead: true }
+      post :set_state_read, params: { chat_token: chat.token }
     end
 
     it "message state is 'read'" do

@@ -1,9 +1,7 @@
 class Chats::MessagesController < Chats::ApplicationController
   def index
     if chat_has_session(chat, session_token)
-
       change_state(chat.messages, :accepted?, :deliver!)
-
       render json: chat.messages
     else
       render body: nil, status: :forbidden
@@ -12,17 +10,20 @@ class Chats::MessagesController < Chats::ApplicationController
 
   def create
     if chat_has_session(chat, session_token)
-      if params[:setStateRead]
-        change_state(chat.messages, :delivered?, :read!)
-      else
-        session_id = chat.sessions.find_by(token: session_token).id
-        session = Session.find(session_id)
-        message = session.messages.new(message: params[:message])
-
-        message.accept! if message.save
-      end
+    session_id = chat.sessions.find_by(token: session_token).id
+    session = Session.find(session_id)
+    message = session.messages.new(message: params[:message])
+    message.accept! if message.save
     else
       render body: nil, status: :internal_server_error
+    end
+  end
+
+  def set_state_read
+    if chat_has_session(chat, session_token)
+      change_state(chat.messages, :delivered?, :read!)
+    else
+      render body: nil, status: :forbidden
     end
   end
 
