@@ -2,7 +2,7 @@ class Chats::MessagesController < Chats::ApplicationController
   before_action :chat_has_session, only: [:index, :create, :set_state_read]
 
   def index
-    change_state(chat.messages, :accepted?, :deliver!)
+    change_state(chat.messages, :may_deliver?, :deliver!)
     render json: chat.messages
   end
 
@@ -11,15 +11,11 @@ class Chats::MessagesController < Chats::ApplicationController
     session = Session.find(session_id)
     message = session.messages.new(message: params[:message])
 
-    if message.save
-      message.accept!
-    else
-      render body: nil, status: :internal_server_error
-    end
+    message.accept! if message.save
   end
 
   def set_state_read
-    change_state(chat.messages, :delivered?, :read!)
+    change_state(chat.messages, :may_read?, :read!)
   end
 
   private
