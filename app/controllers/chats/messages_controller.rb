@@ -3,7 +3,7 @@ class Chats::MessagesController < Chats::ApplicationController
 
   def index
     change_state(chat.messages, :may_deliver?, :deliver!)
-    render json: chat.messages
+    render json: chat.messages.order(:id)
   end
 
   def create
