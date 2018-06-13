@@ -37,6 +37,7 @@ gem 'aasm'
 gem 'gon'
 gem 'rubocop'
 gem 'pg', group: :production
+gem 'webpacker'
 
 group :development, :test do
   gem 'sqlite3'
