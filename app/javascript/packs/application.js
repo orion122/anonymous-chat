@@ -20,17 +20,50 @@ document.addEventListener('DOMContentLoaded', () => {
             message: '',
             allMessages: []
         },
+        mounted: function(){
+            setInterval(() => {
+                if (window.location.pathname == `/chats/${window.location.href.split('/').reverse()[0]}`) {
+                    this.$http.get(`/chats/${window.location.href.split('/').reverse()[0]}/messages`,
+                        {headers: {'X-Auth-Token': localStorage.getItem('session_token')}}
+                    ).then(response => {
+                        this.allMessages = response.body.reduce(((init, messageObject) => {
+                            init.push(`${messageObject.session_id}: ${messageObject.message} (${messageObject.state})`)
+                            return init
+                        }), [])
+                    }, response => {});
+                    this.setStateRead()
+                }
+            }, 5000);
+        },
         methods: {
-            enterMessage() {
+            saveMessage() {
                 this.$http.post(`/chats/${window.location.href.split('/').reverse()[0]}/messages`,
                     {message: this.message},
-                    {headers: {'X-Auth-Token': localStorage.getItem('session_token'),
-                               'X-CSRF-TOKEN': gon.csrf}
-                    }
+                    {headers: {
+                        'X-Auth-Token': localStorage.getItem('session_token'),
+                        'X-CSRF-TOKEN': gon.csrf
+                    }}
                 ).then(response => {
                     this.message = ''
-
-                }, response => {console.log(localStorage.getItem('session_token'))});
+                }, response => {});
+                this.$http.get(`/chats/${window.location.href.split('/').reverse()[0]}/messages`,
+                    {headers: {'X-Auth-Token': localStorage.getItem('session_token')}}
+                ).then(response => {
+                    this.allMessages = response.body.reduce(((init, messageObject) => {
+                        init.push(`${messageObject.session_id}: ${messageObject.message} (${messageObject.state})`)
+                        return init
+                    }), [])
+                }, response => {});
+                this.setStateRead()
+            },
+            setStateRead() {
+                this.$http.post(`/chats/${window.location.href.split('/').reverse()[0]}/messages/set_state_read`,
+                    {message: this.message},
+                    {headers: {
+                            'X-Auth-Token': localStorage.getItem('session_token'),
+                            'X-CSRF-TOKEN': gon.csrf
+                    }}
+                ).then(response => {}, response => {});
             }
         },
         computed: {
@@ -42,8 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                        init.push(`${messageObject.session_id}: ${messageObject.message} (${messageObject.state})`)
                                        return init
                                    }), [])
-                }, response => {
-                });
+                }, response => {});
             }
         }
     })
