@@ -1,7 +1,11 @@
-.main
-  .messages-history id='messages-history'
-    #messages
+#chat
+  .main
+    .messages-history id='messages-history'
+      #messages
 
-.footer
-  .input-box
-    input type="text" class='input-box_text'
+
+  .footer
+    .input-box
+      input type="text" class='input-box_text' v-model="messages" @keyup.enter="test"
+
+  | {{ showMessages() }}

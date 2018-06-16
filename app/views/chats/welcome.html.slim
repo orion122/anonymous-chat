@@ -14,3 +14,7 @@ h1
 = form_tag(join_random_chats_path)
   input type="hidden" name="session_token" value=@session_token
   = submit_tag t('root.join_random_chat')
+
+
+#welcome
+  | {{ rewriteSessionTokenInLocalStorage() }}

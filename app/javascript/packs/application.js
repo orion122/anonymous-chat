@@ -1,10 +1,40 @@
-/* eslint no-console:0 */
-// This file is automatically compiled by Webpack, along with any other files
-// present in this directory. You're encouraged to place your actual application logic in
-// a relevant structure within app/javascript and only use these pack files to reference
-// that code so it'll be compiled.
-//
-// To reference this file, add <%= javascript_pack_tag 'application' %> to the appropriate
-// layout file, like app/views/layouts/application.html.erb
+import Vue from 'vue/dist/vue.esm'
+import VueResource from 'vue-resource';
+Vue.use(VueResource);
 
-console.log('Hello World from Webpacker')
+document.addEventListener('DOMContentLoaded', () => {
+    var welcome = new Vue({
+        el: '#welcome',
+        methods: {
+            rewriteSessionTokenInLocalStorage() {
+                localStorage.removeItem('session_token')
+                localStorage.setItem('session_token', gon.session_token)
+                console.log(gon.session_token)
+            }
+        }
+    })
+
+    var chat = new Vue({
+        el: '#chat',
+        data: {
+            messages: []
+        },
+        methods: {
+            showMessages() {
+                // this.getMessages()
+                console.log(this.messages)
+            },
+            getMessages() {
+                this.$http.get(`/chats/${this.getChatToken(window.location.href)}/messages`,
+                               {headers: {'X-Auth-Token': localStorage.getItem('session_token')}}
+                               ).then(response => {
+                    this.messages = response.body
+                }, response => {
+                });
+            },
+            getChatToken(url) {
+                return url.split('/').reverse()[0]
+            }
+        }
+    })
+})
