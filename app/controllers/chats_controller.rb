@@ -14,7 +14,9 @@ class ChatsController < ApplicationController
     redirect_to action: 'show', token: chat_token
   end
 
-  def show; end
+  def show
+    gon.csrf = form_authenticity_token
+  end
 
   def join_random
     random_chat = Chat.where(filled: false).order('RANDOM()').first

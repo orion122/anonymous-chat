@@ -17,23 +17,33 @@ document.addEventListener('DOMContentLoaded', () => {
     var chat = new Vue({
         el: '#chat',
         data: {
-            messages: []
+            message: '',
+            allMessages: []
         },
         methods: {
-            showMessages() {
-                // this.getMessages()
-                console.log(this.messages)
-            },
+            enterMessage() {
+                this.$http.post(`/chats/${window.location.href.split('/').reverse()[0]}/messages`,
+                    {message: this.message},
+                    {headers: {'X-Auth-Token': localStorage.getItem('session_token'),
+                               'X-CSRF-TOKEN': gon.csrf}
+                    }
+                ).then(response => {
+                    this.message = ''
+
+                }, response => {console.log(localStorage.getItem('session_token'))});
+            }
+        },
+        computed: {
             getMessages() {
-                this.$http.get(`/chats/${this.getChatToken(window.location.href)}/messages`,
+                this.$http.get(`/chats/${window.location.href.split('/').reverse()[0]}/messages`,
                                {headers: {'X-Auth-Token': localStorage.getItem('session_token')}}
                                ).then(response => {
-                    this.messages = response.body
+                                   this.allMessages = response.body.reduce(((init, messageObject) => {
+                                       init.push(`${messageObject.session_id}: ${messageObject.message} (${messageObject.state})`)
+                                       return init
+                                   }), [])
                 }, response => {
                 });
-            },
-            getChatToken(url) {
-                return url.split('/').reverse()[0]
             }
         }
     })
