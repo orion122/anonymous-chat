@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
             rewriteSessionTokenInLocalStorage() {
                 localStorage.removeItem('session_token')
                 localStorage.setItem('session_token', gon.session_token)
-                console.log(gon.session_token)
             }
         }
     })
@@ -22,22 +21,27 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         mounted: function(){
             setInterval(() => {
-                if (window.location.pathname == `/chats/${window.location.href.split('/').reverse()[0]}`) {
-                    this.$http.get(`/chats/${window.location.href.split('/').reverse()[0]}/messages`,
-                        {headers: {'X-Auth-Token': localStorage.getItem('session_token')}}
-                    ).then(response => {
-                        this.allMessages = response.body.reduce(((init, messageObject) => {
-                            init.push(`${messageObject.session_id}: ${messageObject.message} (${messageObject.state})`)
-                            return init
-                        }), [])
-                    }, response => {});
+                if (window.location.pathname == `/chats/${this.getChatToken()}`) {
+                    this.getMessages()
                     this.setStateRead()
                 }
             }, 5000);
         },
         methods: {
+            getMessages() {
+                this.$http.get(`/chats/${this.getChatToken()}/messages`,
+                    {headers: {
+                        'X-Auth-Token': localStorage.getItem('session_token')
+                    }}
+                ).then(response => {
+                    this.allMessages = response.body.reduce(((init, messageObject) => {
+                        init.push(`${messageObject.session_id}: ${messageObject.message} (${messageObject.state})`)
+                        return init
+                    }), [])
+                });
+            },
             saveMessage() {
-                this.$http.post(`/chats/${window.location.href.split('/').reverse()[0]}/messages`,
+                this.$http.post(`/chats/${this.getChatToken()}/messages`,
                     {message: this.message},
                     {headers: {
                         'X-Auth-Token': localStorage.getItem('session_token'),
@@ -45,37 +49,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     }}
                 ).then(response => {
                     this.message = ''
-                }, response => {});
-                this.$http.get(`/chats/${window.location.href.split('/').reverse()[0]}/messages`,
-                    {headers: {'X-Auth-Token': localStorage.getItem('session_token')}}
-                ).then(response => {
-                    this.allMessages = response.body.reduce(((init, messageObject) => {
-                        init.push(`${messageObject.session_id}: ${messageObject.message} (${messageObject.state})`)
-                        return init
-                    }), [])
-                }, response => {});
+                });
+                this.getMessages()
                 this.setStateRead()
             },
             setStateRead() {
-                this.$http.post(`/chats/${window.location.href.split('/').reverse()[0]}/messages/set_state_read`,
+                this.$http.post(`/chats/${this.getChatToken()}/messages/set_state_read`,
                     {message: this.message},
                     {headers: {
-                            'X-Auth-Token': localStorage.getItem('session_token'),
-                            'X-CSRF-TOKEN': gon.csrf
+                        'X-Auth-Token': localStorage.getItem('session_token'),
+                        'X-CSRF-TOKEN': gon.csrf
                     }}
-                ).then(response => {}, response => {});
-            }
-        },
-        computed: {
-            getMessages() {
-                this.$http.get(`/chats/${window.location.href.split('/').reverse()[0]}/messages`,
-                               {headers: {'X-Auth-Token': localStorage.getItem('session_token')}}
-                               ).then(response => {
-                                   this.allMessages = response.body.reduce(((init, messageObject) => {
-                                       init.push(`${messageObject.session_id}: ${messageObject.message} (${messageObject.state})`)
-                                       return init
-                                   }), [])
-                }, response => {});
+                );
+            },
+            getChatToken() {
+                return window.location.href.split('/').reverse()[0]
             }
         }
     })
