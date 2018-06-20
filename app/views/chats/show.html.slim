@@ -3,12 +3,10 @@
     #messages
 
 #chat
-  | {{ getMessages }}
-  ul
-    li v-for="message in allMessages" {{ message }}
+  template v-for="message in allMessages"
+    p
+      | {{ message }}
 
   .footer
     .input-box
       input type="text" class='input-box_text' v-model="message" @keyup.enter="saveMessage()"
-
-
