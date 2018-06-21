@@ -17,13 +17,12 @@ document.addEventListener('DOMContentLoaded', () => {
         el: '#chat',
         data: {
             message: '',
-            allMessages: []
+            messages: []
         },
         mounted: function(){
             setInterval(() => {
                 if (window.location.pathname == `/chats/${this.getChatToken()}`) {
                     this.getMessages()
-                    this.setStateRead()
                 }
             }, 5000);
         },
@@ -34,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         'X-Auth-Token': localStorage.getItem('session_token')
                     }}
                 ).then(response => {
-                    this.allMessages = response.body.reduce(((init, messageObject) => {
+                    this.messages = response.body.reduce(((init, messageObject) => {
                         init.push(`${messageObject.session_id}: ${messageObject.message} (${messageObject.state})`)
                         return init
                     }), [])
@@ -50,8 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 ).then(response => {
                     this.message = ''
                 });
-                this.getMessages()
-                this.setStateRead()
             },
             setStateRead() {
                 this.$http.post(`/chats/${this.getChatToken()}/messages/set_state_read`,
@@ -64,6 +61,14 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             getChatToken() {
                 return window.location.href.split('/').reverse()[0]
+            }
+        },
+        watch: {
+            message: function () {
+                this.getMessages()
+            },
+            messages: function () {
+                this.setStateRead()
             }
         }
     })
