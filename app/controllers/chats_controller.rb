@@ -4,6 +4,7 @@ class ChatsController < ApplicationController
     gon.session_token = @session_token
     @chat = Chat.new
     gon.t_welcome = t('root.welcome')
+    gon.csrf = form_authenticity_token
   end
 
   def create
