@@ -6,6 +6,7 @@
   height: 100%;
   margin-left: 20px;
   margin-right: 20px;
+  margin-bottom: 10px;
 }
 
 .input-box_text {
@@ -29,16 +30,14 @@
   padding: 0 18px 1rem 1.5rem;
 }
 
-.input-box {
-  margin-bottom: 10px;
-}
-
 body {
   display: flex;
   flex-direction: column;
   height: 100vh;
 }
 
-.main {
-  flex: 1;
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: calc(100% - 8px);
 }
