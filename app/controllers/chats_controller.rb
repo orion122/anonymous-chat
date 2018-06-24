@@ -3,6 +3,7 @@ class ChatsController < ApplicationController
     @session_token = SecureRandom.uuid
     gon.session_token = @session_token
     @chat = Chat.new
+    gon.t_welcome = t('root.welcome')
   end
 
   def create

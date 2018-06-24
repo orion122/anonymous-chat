@@ -7,10 +7,19 @@
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%#= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_pack_tag 'application' %>
+    <%#= javascript_include_tag 'welcome' %>
   </head>
 
   <body>
-    <%= yield %>
+    <% flash.each do |key, value| %>
+      <div class="alert alert-<%= key %>"><%= value %></div>
+    <% end %>
+
+    <%#= yield %>
+    <div id='app'>
+      <router-view></router-view>
+    </div>
+
+    <%= javascript_pack_tag 'welcome' %>
   </body>
 </html>
