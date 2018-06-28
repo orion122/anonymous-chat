@@ -1,18 +1,9 @@
 <template>
     <div id="welcome">
+        <flash-message></flash-message>
         <h1>{{ t_welcome }}</h1>
-        <form class="new_chat" id="new_chat" action="/chats" accept-charset="UTF-8" method="post">
-            <input name="utf8" type="hidden" value="&#x2713;" />
-            <input type="hidden" name="authenticity_token" :value="authenticity_token" />
-            <input name="session_token" type="hidden" :value="session_token" />
-            <input type="submit" name="commit" value="Создать чат" data-disable-with="Создать чат" />
-        </form>
-        <form action="/chats/join_random" accept-charset="UTF-8" method="post">
-            <input name="utf8" type="hidden" value="&#x2713;" />
-            <input type="hidden" name="authenticity_token" :value="authenticity_token" />
-            <input name="session_token" type="hidden" :value="session_token" />
-            <input type="submit" name="commit" value="Присоединиться к случайному чату" data-disable-with="Присоединиться к случайному чату" />
-        </form>
+        <button @click="createChat()">Создать чат</button>
+        <button @click="joinRandom()">Присоединиться к чату</button>
         {{ rewriteSessionTokenInLocalStorage() }}
     </div>
 </template>
@@ -30,6 +21,27 @@
             rewriteSessionTokenInLocalStorage() {
                 localStorage.removeItem('session_token')
                 localStorage.setItem('session_token', this.session_token)
+            },
+            createChat() {
+                this.$http.post('/chats',
+                    {session_token: this.session_token},
+                    {headers: { 'X-CSRF-TOKEN': gon.csrf }}
+                ).then(response => {
+                    this.$router.push(`/chats/${response.body.chat_token}`)
+                });
+            },
+            joinRandom() {
+                this.$http.post('/chats/join_random',
+                    {session_token: this.session_token},
+                    {headers: { 'X-CSRF-TOKEN': gon.csrf }}
+                ).then(response => {
+                    if (response.body.free_chat_found) {
+                        this.$router.push(`/chats/${response.body.chat_token}`)
+                    } else {
+                        this.flash('Свободный чат не найден', 'warning');
+                    }
+
+                });
             }
         }
     }

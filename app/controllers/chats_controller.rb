@@ -13,7 +13,8 @@ class ChatsController < ApplicationController
     chat = Chat.create(token: chat_token)
     chat.sessions.create(token: params[:session_token])
 
-    redirect_to action: 'show', token: chat_token
+    # redirect_to action: 'show', token: chat_token
+    render json: {chat_token: chat_token}
   end
 
   def show
@@ -26,10 +27,12 @@ class ChatsController < ApplicationController
     if random_chat
       random_chat.sessions.create(token: params[:session_token])
       random_chat.update(filled: true)
-      redirect_to action: 'show', token: random_chat.token
+      # redirect_to action: 'show', token: random_chat.token
+      render json: {free_chat_found: true, chat_token: random_chat.token}
     else
-      flash[:alert] = t('flash.alert')
-      redirect_to action: 'welcome'
+      # flash[:alert] = t('flash.alert')
+      # redirect_to action: 'welcome'
+      render json: {free_chat_found: false}
     end
   end
 end
