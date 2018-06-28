@@ -8,13 +8,19 @@ class ChatsController < ApplicationController
   end
 
   def create
-    chat_token = SecureRandom.uuid
+    if Session.find_by(token: params[:session_token])
+      render json: {session_token_unique: false}
+      return
+    end
 
+    chat_token = SecureRandom.uuid
     chat = Chat.create(token: chat_token)
     chat.sessions.create(token: params[:session_token])
 
-    # redirect_to action: 'show', token: chat_token
-    render json: {chat_token: chat_token}
+    render json: {
+        session_token_unique: true,
+        chat_token: chat_token
+    }
   end
 
   def show
@@ -22,17 +28,26 @@ class ChatsController < ApplicationController
   end
 
   def join_random
-    random_chat = Chat.where(filled: false).order('RANDOM()').first
+    if Session.find_by(token: params[:session_token])
+      render json: {session_token_unique: false}
+      return
+    end
 
+    random_chat = Chat.where(filled: false).order('RANDOM()').first
     if random_chat
       random_chat.sessions.create(token: params[:session_token])
       random_chat.update(filled: true)
-      # redirect_to action: 'show', token: random_chat.token
-      render json: {free_chat_found: true, chat_token: random_chat.token}
+
+      render json: {
+          session_token_unique: true,
+          free_chat_found: true,
+          chat_token: random_chat.token
+      }
     else
-      # flash[:alert] = t('flash.alert')
-      # redirect_to action: 'welcome'
-      render json: {free_chat_found: false}
+      render json: {
+          session_token_unique: true,
+          free_chat_found: false
+      }
     end
   end
 end
