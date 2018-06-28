@@ -5970,6 +5970,10 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
+vue-chat-scroll@^1.3.3:
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/vue-chat-scroll/-/vue-chat-scroll-1.3.3.tgz#f0264540020cafcdf22384cb619971b01b36f489"
+
 vue-flash-message@^0.6.2:
   version "0.6.2"
   resolved "https://registry.yarnpkg.com/vue-flash-message/-/vue-flash-message-0.6.2.tgz#0b690463bceb8140837e5deefd1381435ca2111a"
