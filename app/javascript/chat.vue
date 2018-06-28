@@ -7,7 +7,7 @@
         </template>
         <div class="footer">
             <div class="input-box">
-                <input type="text" class='input-box_text' v-model="message" @keyup.enter="saveMessage()" />
+                <input type="text" class='input-box_text' v-model.trim="message" @keyup.enter="saveMessage()" />
             </div>
         </div>
     </div>
@@ -42,15 +42,17 @@
                 });
             },
             saveMessage() {
-                this.$http.post(`/chats/${this.getChatToken()}/messages`,
-                    {message: this.message},
-                    {headers: {
-                            'X-Auth-Token': localStorage.getItem('session_token'),
-                            'X-CSRF-TOKEN': gon.csrf
-                        }}
-                ).then(response => {
-                    this.message = ''
-                });
+                if(this.message !== '') {
+                    this.$http.post(`/chats/${this.getChatToken()}/messages`,
+                        {message: this.message},
+                        {headers: {
+                                'X-Auth-Token': localStorage.getItem('session_token'),
+                                'X-CSRF-TOKEN': gon.csrf
+                            }}
+                    ).then(response => {
+                        this.message = ''
+                    });
+                }
             },
             setStateRead() {
                 this.$http.post(`/chats/${this.getChatToken()}/messages/set_state_read`,
