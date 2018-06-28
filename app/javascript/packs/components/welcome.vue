@@ -1,9 +1,9 @@
 <template>
     <div id="welcome">
         <flash-message></flash-message>
-        <h1>{{ t_welcome }}</h1>
-        <button @click="createChat()">Создать чат</button>
-        <button @click="joinRandom()">Присоединиться к чату</button>
+        <h1>{{ $t("root.welcome") }}</h1>
+        <button @click="createChat()">{{ $t("root.create_chat") }}</button>
+        <button @click="joinRandomChat()">{{ $t("root.join_random_chat") }}</button>
         {{ rewriteSessionTokenInLocalStorage() }}
     </div>
 </template>
@@ -30,23 +30,23 @@
                     if (response.body.session_token_unique) {
                         this.$router.push(`/chats/${response.body.chat_token}`)
                     } else {
-                        this.flash('Сессия с таким токеном существует. Перезагрузите страницу для обновления токена', 'error')
+                        this.flash(this.$t('flash.session_token_exists'), 'error')
                     }
                 });
             },
-            joinRandom() {
+            joinRandomChat() {
                 this.$http.post('/chats/join_random',
                     {session_token: this.session_token},
                     {headers: { 'X-CSRF-TOKEN': gon.csrf }}
                 ).then(response => {
                     if (!response.body.session_token_unique) {
-                        this.flash('Сессия с таким токеном существует. Перезагрузите страницу для обновления токена', 'error')
+                        this.flash(this.$t('flash.session_token_exists'), 'error')
                         return
                     }
                     if (response.body.free_chat_found) {
                         this.$router.push(`/chats/${response.body.chat_token}`)
                     } else {
-                        this.flash('Свободный чат не найден', 'warning')
+                        this.flash(this.$t('flash.no_empty_chats'), 'warning')
                     }
                 });
             }
