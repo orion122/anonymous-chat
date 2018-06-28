@@ -1,5 +1,4 @@
 import Vue from 'vue/dist/vue.esm'
-import App from '../app'
 import Welcome from '../welcome.vue'
 import Chat from '../chat.vue'
 import VueRouter from 'vue-router'
