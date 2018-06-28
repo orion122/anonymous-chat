@@ -1,15 +1,9 @@
 <template>
-    <div id="chat">
-        <template v-for="message in messages">
-            <p>
-                {{ message }}
-            </p>
-        </template>
-        <div class="footer">
-            <div class="input-box">
-                <input type="text" class='input-box_text' v-model.trim="message" @keyup.enter="saveMessage()" />
-            </div>
-        </div>
+    <div id="chat" class="chat">
+        <ul class="messages" v-chat-scroll>
+            <li class="message" v-for="n in messages">{{ n }}</li>
+        </ul>
+        <input type="text" class='input-box_text' v-model.trim="message" @keyup.enter="saveMessage()" />
     </div>
 </template>
 
