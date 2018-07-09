@@ -18,7 +18,8 @@ body {
 
 .messages {
   overflow-x: auto;
-  height: 100%;
+  height: calc(100% - 70px);
+  margin-bottom: 0;
 }
 
 .chat {
