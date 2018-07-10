@@ -6,8 +6,8 @@ import VueResource from 'vue-resource'
 import VueFlashMessage from 'vue-flash-message';
 import VueI18n from 'vue-i18n';
 import VueChatScroll from 'vue-chat-scroll'
-Vue.use(VueChatScroll)
 
+Vue.use(VueChatScroll)
 Vue.use(VueResource)
 Vue.use(VueRouter)
 Vue.use(VueFlashMessage);
