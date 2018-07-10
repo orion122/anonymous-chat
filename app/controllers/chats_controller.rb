@@ -22,9 +22,7 @@ class ChatsController < ApplicationController
     }
   end
 
-  def show
-    gon.csrf = form_authenticity_token
-  end
+  def show; end
 
   def join_random
     if Session.find_by(token: params[:session_token])
