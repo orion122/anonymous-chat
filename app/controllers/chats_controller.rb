@@ -3,7 +3,7 @@ class ChatsController < ApplicationController
     @session_token = SecureRandom.uuid
     gon.session_token = @session_token
     @chat = Chat.new
-    gon.csrf = form_authenticity_token
+    gon.csrf_token = form_authenticity_token
   end
 
   def create

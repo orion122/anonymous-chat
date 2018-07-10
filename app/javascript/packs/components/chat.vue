@@ -41,7 +41,7 @@
                         {message: this.message},
                         {headers: {
                                 'X-Auth-Token': localStorage.getItem('session_token'),
-                                'X-CSRF-TOKEN': gon.csrf
+                                'X-CSRF-TOKEN': gon.csrf_token
                             }}
                     ).then(response => {
                         this.message = ''
@@ -53,7 +53,7 @@
                     {message: this.message},
                     {headers: {
                             'X-Auth-Token': localStorage.getItem('session_token'),
-                            'X-CSRF-TOKEN': gon.csrf
+                            'X-CSRF-TOKEN': gon.csrf_token
                         }}
                 );
             },

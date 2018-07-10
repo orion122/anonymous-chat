@@ -10,22 +10,15 @@
 
 <script>
     export default {
-        data() {
-            return {
-                t_welcome: gon.t_welcome,
-                session_token: gon.session_token,
-                authenticity_token: gon.csrf
-            }
-        },
         methods: {
             rewriteSessionTokenInLocalStorage() {
                 localStorage.removeItem('session_token')
-                localStorage.setItem('session_token', this.session_token)
+                localStorage.setItem('session_token', gon.session_token)
             },
             createChat() {
                 this.$http.post('/chats',
-                    {session_token: this.session_token},
-                    {headers: { 'X-CSRF-TOKEN': gon.csrf }}
+                    {session_token: gon.session_token},
+                    {headers: { 'X-CSRF-TOKEN': gon.csrf_token }}
                 ).then(response => {
                     if (response.body.session_token_unique) {
                         this.$router.push(`/chats/${response.body.chat_token}`)
@@ -36,8 +29,8 @@
             },
             joinRandomChat() {
                 this.$http.post('/chats/join_random',
-                    {session_token: this.session_token},
-                    {headers: { 'X-CSRF-TOKEN': gon.csrf }}
+                    {session_token: gon.session_token},
+                    {headers: { 'X-CSRF-TOKEN': gon.csrf_token }}
                 ).then(response => {
                     if (!response.body.session_token_unique) {
                         this.flash(this.$t('flash.session_token_exists'), 'error')
