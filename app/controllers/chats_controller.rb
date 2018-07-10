@@ -8,7 +8,7 @@ class ChatsController < ApplicationController
 
   def create
     if Session.find_by(token: params[:session_token])
-      render json: {session_token_unique: false}
+      render json: { session_token_unique: false }
       return
     end
 
@@ -26,7 +26,7 @@ class ChatsController < ApplicationController
 
   def join_random
     if Session.find_by(token: params[:session_token])
-      render json: {session_token_unique: false}
+      render json: { session_token_unique: false }
       return
     end
 
