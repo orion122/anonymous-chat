@@ -7,6 +7,7 @@ AllCops:
     - 'Rakefile'
     - 'spec/spec_helper.rb'
     - 'spec/rails_helper.rb'
+    - 'node_modules/**/*'
 
 Rails:
   Enabled: true
