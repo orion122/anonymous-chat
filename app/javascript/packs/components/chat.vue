@@ -45,6 +45,7 @@
                             }}
                     ).then(response => {
                         this.message = ''
+                        this.getMessages()
                     });
                 }
             },
@@ -62,9 +63,6 @@
             }
         },
         watch: {
-            message: function () {
-                this.getMessages()
-            },
             messages: function () {
                 this.setStateRead()
             }
