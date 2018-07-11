@@ -1,18 +1,43 @@
 {
   "name": "anonymous-chat",
   "private": true,
+  "jest": {
+    "roots": [
+      "spec/javascript"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "vue"
+    ],
+    "transform": {
+      "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
+      ".*\\.(vue)$": "<rootDir>/node_modules/vue-jest"
+    },
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/controllers/javascript/packs/components/$1"
+    },
+    "moduleDirectories": [
+      "node_modules",
+      "app/javascript/packs/components"
+    ]
+  },
   "dependencies": {
     "@rails/webpacker": "3.5",
     "vue": "^2.5.16",
-    "vue-loader": "14.2.2",
-    "vue-resource": "^1.5.1",
-    "vue-template-compiler": "^2.5.16",
-    "vue-router": "^3.0.1",
+    "vue-chat-scroll": "^1.3.3",
     "vue-flash-message": "^0.6.2",
     "vue-i18n": "^8.0.0",
-    "vue-chat-scroll": "^1.3.3"
+    "vue-loader": "14.2.2",
+    "vue-resource": "^1.5.1",
+    "vue-router": "^3.0.1",
+    "vue-template-compiler": "^2.5.16"
   },
   "devDependencies": {
+    "babel-jest": "^23.4.0",
+    "babel-preset-es2015": "^6.24.1",
+    "jest": "^23.4.0",
+    "vue-jest": "^2.6.0",
     "webpack-dev-server": "2.11.2"
   }
 }
