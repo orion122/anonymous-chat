@@ -30,12 +30,24 @@ RSpec.describe Chats::ChatsController, type: :controller do
       expect(Session.first.token).not_to eq(Session.second.token)
     end
 
-    it 'redirect to action show' do
-      expect(response).to redirect_to action: :show,
-                                      token: Chat.first.token
+    it 'render json where session_token_unique is true' do
+      expect(response.body).to eq({ session_token_unique: true,
+                                    chat_token: Chat.first.token }.to_json)
     end
 
     it { expect(Chat.first).to eq(Session.first.chat) }
+  end
+
+  describe 'POST #create with not unique session token' do
+    let(:token) { '12345' }
+    before do
+      post :create, params: { session_token: :token }
+      post :create, params: { session_token: :token }
+    end
+
+    it 'render json where session_token_unique is false' do
+      expect(response.body).to eq({ session_token_unique: false }.to_json)
+    end
   end
 
   describe 'GET #show' do
@@ -52,9 +64,10 @@ RSpec.describe Chats::ChatsController, type: :controller do
       post :join_random, params: { session_token: SecureRandom.uuid }
     end
 
-    it 'redirect to action show random chat' do
-      expect(response).to redirect_to action: :show,
-                                      token: Chat.first.token
+    it 'render json where session_token_unique and free_chat_found is true' do
+      expect(response.body).to eq({ session_token_unique: true,
+                               free_chat_found: true,
+                               chat_token: Chat.first.token }.to_json)
     end
 
     it 'sets @chat.filled to true' do
@@ -64,15 +77,24 @@ RSpec.describe Chats::ChatsController, type: :controller do
     it { expect(Chat.first).to eq(Session.second.chat) }
   end
 
+  describe 'POST #join_random with not unique session token' do
+    let(:token) { '12345' }
+    before do
+      post :create, params: { session_token: :token }
+      post :join_random, params: { session_token: :token }
+    end
+
+    it 'render json where session_token_unique is false' do
+      expect(response.body).to eq({ session_token_unique: false }.to_json)
+    end
+  end
+
   describe "POST #join_random, when an empty chat doesn't exist" do
     before { post :join_random, params: { session_token: SecureRandom.uuid } }
 
-    it 'redirect to action welcome' do
-      expect(response).to redirect_to action: :welcome
-    end
-
-    it 'show flash message' do
-      expect(flash[:alert]).to eq(I18n.t('flash.alert'))
+    it 'render json where free_chat_found is false' do
+      expect(response.body).to eq({ session_token_unique: true,
+                                    free_chat_found: false }.to_json)
     end
   end
 end
