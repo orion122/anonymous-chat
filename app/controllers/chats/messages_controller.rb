@@ -2,6 +2,7 @@ class Chats::MessagesController < Chats::ApplicationController
   before_action :chat_has_session, only: [:index, :create, :set_state_read]
 
   def index
+    sleep 6
     change_state(chat.messages, :may_deliver?, :deliver!)
     render json: chat.messages.includes(:session).order(:id).map {
         |message| message.as_json.merge({ nickname: message.session.nickname.as_json })
