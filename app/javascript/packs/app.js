@@ -51,7 +51,14 @@ const i18n = new VueI18n({
     messages: translations
 })
 
+Vue.http.interceptors.push((request, next) => {
+    request.headers.set('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').getAttribute('content'))
+    request.headers.set('X-Auth-Token', localStorage.getItem('session_token'))
+    next()
+})
+
 const app = new Vue({
     router,
     i18n
 }).$mount('#app')
+

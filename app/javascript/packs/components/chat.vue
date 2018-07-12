@@ -25,10 +25,7 @@
         },
         methods: {
             getMessages() {
-                this.$http.get(`/chats/${this.getChatToken()}/messages`,
-                    {headers: {
-                            'X-Auth-Token': this.current_session_token
-                        }}
+                this.$http.get(`/chats/${this.getChatToken()}/messages`
                 ).then(response => {
                     let userData = ''
                     this.messages = response.body.reduce(((init, messageObject) => {
@@ -44,11 +41,7 @@
             saveMessage() {
                 if(this.message !== '') {
                     this.$http.post(`/chats/${this.getChatToken()}/messages`,
-                        {message: this.message},
-                        {headers: {
-                                'X-Auth-Token': this.current_session_token,
-                                'X-CSRF-TOKEN': gon.csrf_token
-                            }}
+                        {message: this.message}
                     ).then(response => {
                         this.message = ''
                         this.getMessages()
@@ -57,11 +50,7 @@
             },
             setStateRead() {
                 this.$http.post(`/chats/${this.getChatToken()}/messages/set_state_read`,
-                    {message: this.message},
-                    {headers: {
-                            'X-Auth-Token': this.current_session_token,
-                            'X-CSRF-TOKEN': gon.csrf_token
-                        }}
+                    {message: this.message}
                 );
             },
             getChatToken() {

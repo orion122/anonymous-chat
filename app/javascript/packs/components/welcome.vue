@@ -17,8 +17,7 @@
             },
             createChat() {
                 this.$http.post('/chats',
-                    {session_token: gon.session_token},
-                    {headers: { 'X-CSRF-TOKEN': gon.csrf_token }}
+                    {session_token: gon.session_token}
                 ).then(response => {
                     if (response.body.session_token_unique) {
                         this.$router.push(`/chats/${response.body.chat_token}`)
@@ -29,8 +28,7 @@
             },
             joinRandomChat() {
                 this.$http.post('/chats/join_random',
-                    {session_token: gon.session_token},
-                    {headers: { 'X-CSRF-TOKEN': gon.csrf_token }}
+                    {session_token: gon.session_token}
                 ).then(response => {
                     if (!response.body.session_token_unique) {
                         this.flash(this.$t('flash.session_token_exists'), 'error')
