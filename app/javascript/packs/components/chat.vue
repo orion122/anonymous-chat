@@ -12,7 +12,8 @@
         data() {
             return {
                 message: '',
-                messages: []
+                messages: [],
+                current_session_token: localStorage.getItem('session_token')
             }
         },
         mounted: function(){
@@ -26,11 +27,16 @@
             getMessages() {
                 this.$http.get(`/chats/${this.getChatToken()}/messages`,
                     {headers: {
-                            'X-Auth-Token': localStorage.getItem('session_token')
+                            'X-Auth-Token': this.current_session_token
                         }}
                 ).then(response => {
+                    let userData = ''
                     this.messages = response.body.reduce(((init, messageObject) => {
-                        init.push(`${messageObject.nickname}: ${messageObject.message} (${messageObject.state})`)
+                        userData = `${messageObject.nickname}: ${messageObject.message}`
+                        if (messageObject.session_token === this.current_session_token) {
+                            userData += `(${messageObject.state})`
+                        }
+                        init.push(userData)
                         return init
                     }), [])
                 });
@@ -40,7 +46,7 @@
                     this.$http.post(`/chats/${this.getChatToken()}/messages`,
                         {message: this.message},
                         {headers: {
-                                'X-Auth-Token': localStorage.getItem('session_token'),
+                                'X-Auth-Token': this.current_session_token,
                                 'X-CSRF-TOKEN': gon.csrf_token
                             }}
                     ).then(response => {
@@ -53,7 +59,7 @@
                 this.$http.post(`/chats/${this.getChatToken()}/messages/set_state_read`,
                     {message: this.message},
                     {headers: {
-                            'X-Auth-Token': localStorage.getItem('session_token'),
+                            'X-Auth-Token': this.current_session_token,
                             'X-CSRF-TOKEN': gon.csrf_token
                         }}
                 );
