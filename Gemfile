@@ -38,6 +38,7 @@ gem 'gon'
 gem 'rubocop'
 gem 'pg', group: :production
 gem 'webpacker'
+gem 'haikunator'
 
 group :development, :test do
   gem 'sqlite3'
