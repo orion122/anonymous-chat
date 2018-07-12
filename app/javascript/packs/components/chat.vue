@@ -30,7 +30,7 @@
                         }}
                 ).then(response => {
                     this.messages = response.body.reduce(((init, messageObject) => {
-                        init.push(`${messageObject.session_id}: ${messageObject.message} (${messageObject.state})`)
+                        init.push(`${messageObject.nickname}: ${messageObject.message} (${messageObject.state})`)
                         return init
                     }), [])
                 });
