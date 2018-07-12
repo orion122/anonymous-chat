@@ -13,8 +13,9 @@ class ChatsController < ApplicationController
     end
 
     chat_token = SecureRandom.uuid
+    nickname = Haikunator.haikunate(0, ' ').titleize
     chat = Chat.create(token: chat_token)
-    chat.sessions.create(token: params[:session_token])
+    chat.sessions.create(token: params[:session_token], nickname: nickname)
 
     render json: {
         session_token_unique: true,
@@ -32,7 +33,8 @@ class ChatsController < ApplicationController
 
     random_chat = Chat.where(filled: false).order('RANDOM()').first
     if random_chat
-      random_chat.sessions.create(token: params[:session_token])
+      nickname = Haikunator.haikunate(0, ' ').titleize
+      random_chat.sessions.create(token: params[:session_token], nickname: nickname)
       random_chat.update(filled: true)
 
       render json: {
