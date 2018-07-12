@@ -4,7 +4,10 @@ class Chats::MessagesController < Chats::ApplicationController
   def index
     change_state(chat.messages, :may_deliver?, :deliver!)
     render json: chat.messages.includes(:session).order(:id).map {
-        |message| message.as_json.merge({ nickname: message.session.nickname.as_json })
+        |message| message.as_json.merge({
+                                            nickname: message.session.nickname.as_json,
+                                            session_token: message.session.token.as_json
+                                        })
     }
   end
 
