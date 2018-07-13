@@ -48,4 +48,22 @@ class ChatsController < ApplicationController
       }
     end
   end
+
+  def enter_by_session_token
+    session = Session.find_by(token: params[:session_token])
+
+    if session
+      chat = session.chat
+
+      render json: {
+          session_token_found: true,
+          chat_token: chat.token
+      }
+    else
+      render json: {
+          session_token_found: false
+      }
+    end
+
+  end
 end

@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resources :chats, only: [:create, :show], param: :token do
     collection do
       post :join_random
+      post :enter_by_session_token
     end
 
     scope module: :chats do
