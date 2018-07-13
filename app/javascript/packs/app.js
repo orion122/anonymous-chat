@@ -30,7 +30,8 @@ const translations = {
         },
         flash: {
             no_empty_chats: "Empty chats are missing. Create your own.",
-            session_token_exists: "The session with such token exists. Reload page to update the token"
+            session_token_exists: "The session with such token exists. Reload page to update the token",
+            chat_not_found: 'Chat not found'
         }
     },
     ru: {
@@ -41,7 +42,8 @@ const translations = {
         },
         flash: {
             no_empty_chats: "Пустые чаты отсутствуют. Создай свой.",
-            session_token_exists: "Сессия с таким токеном существует. Перезагрузите страницу для обновления токена"
+            session_token_exists: "Сессия с таким токеном существует. Перезагрузите страницу для обновления токена",
+            chat_not_found: 'Чат не найден'
         }
     }
 }
