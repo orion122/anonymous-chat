@@ -28,6 +28,9 @@ const translations = {
             create_chat: "Create chat",
             join_random_chat: "Join а random chat"
         },
+        chat: {
+            leave_chat: 'Leave chat'
+        },
         flash: {
             no_empty_chats: "Empty chats are missing. Create your own.",
             session_token_exists: "The session with such token exists. Reload page to update the token",
@@ -39,6 +42,9 @@ const translations = {
             welcome: "Добро пожаловать",
             create_chat: "Создать чат",
             join_random_chat: "Присоединиться к случайному чату"
+        },
+        chat: {
+            leave_chat: 'Выйти из чата'
         },
         flash: {
             no_empty_chats: "Пустые чаты отсутствуют. Создай свой.",
