@@ -4,14 +4,14 @@
         <h1>{{ $t("root.welcome") }}</h1>
         <button @click="createChat()">{{ $t("root.create_chat") }}</button>
         <button @click="joinRandomChat()">{{ $t("root.join_random_chat") }}</button>
-        {{ checkSessionTokenFromLocalStorage() }}
+        {{ enterBySessionToken() }}
     </div>
 </template>
 
 <script>
     export default {
         methods: {
-            checkSessionTokenFromLocalStorage() {
+            enterBySessionToken() {
                 let session_token = localStorage.getItem('session_token')
                 if (session_token !== null) {
                     this.$http.post('/chats/enter_by_session_token',
