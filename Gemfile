@@ -39,6 +39,7 @@ gem 'rubocop'
 gem 'pg', group: :production
 gem 'webpacker'
 gem 'haikunator'
+gem 'rollbar'
 
 group :development, :test do
   gem 'sqlite3'
