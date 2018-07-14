@@ -40,7 +40,6 @@ class Chats::MessagesController < Chats::ApplicationController
     messages.find_each do |message|
       if message.send(from_state) && message.session.token != session_token
         message.send(to_state)
-        Rollbar.info("Change message state from #{from_state} to #{to_state}")
       end
     end
   end
