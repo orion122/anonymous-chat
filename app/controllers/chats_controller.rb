@@ -3,7 +3,7 @@ class ChatsController < ApplicationController
     @session_token = SecureRandom.uuid
     gon.session_token = @session_token
     @chat = Chat.new
-    Rollbar.info('visiting the main page')
+    Rollbar.info('Visiting the main page')
   end
 
   def create
@@ -16,6 +16,8 @@ class ChatsController < ApplicationController
     nickname = Haikunator.haikunate(0, ' ').titleize
     chat = Chat.create(token: chat_token)
     chat.sessions.create(token: params[:session_token], nickname: nickname)
+
+    Rollbar.info('Create a chat')
 
     render json: {
         session_token_unique: true,
@@ -37,6 +39,8 @@ class ChatsController < ApplicationController
       random_chat.sessions.create(token: params[:session_token], nickname: nickname)
       random_chat.update(filled: true)
 
+      Rollbar.info('Join a random chat')
+
       render json: {
           session_token_unique: true,
           free_chat_found: true,
@@ -55,6 +59,8 @@ class ChatsController < ApplicationController
 
     if session
       chat = session.chat
+
+      Rollbar.info('Enter a chat by session token')
 
       render json: {
           session_token_found: true,

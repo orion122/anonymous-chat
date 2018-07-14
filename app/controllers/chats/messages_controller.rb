@@ -3,6 +3,9 @@ class Chats::MessagesController < Chats::ApplicationController
 
   def index
     change_state(chat.messages, :may_deliver?, :deliver!)
+
+    Rollbar.info('Get all messages')
+
     render json: chat.messages.includes(:session).order(:id).map {
         |message| message.as_json.merge({
                                             nickname: message.session.nickname.as_json,
@@ -17,6 +20,8 @@ class Chats::MessagesController < Chats::ApplicationController
     message = session.messages.new(message: params[:message])
 
     message.accept! if message.save
+
+    Rollbar.info('Save message in DB')
   end
 
   def set_state_read
@@ -35,6 +40,7 @@ class Chats::MessagesController < Chats::ApplicationController
     messages.find_each do |message|
       if message.send(from_state) && message.session.token != session_token
         message.send(to_state)
+        Rollbar.info("Change message state from #{from_state} to #{to_state}")
       end
     end
   end
