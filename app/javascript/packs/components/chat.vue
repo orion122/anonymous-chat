@@ -36,8 +36,9 @@
                     let userData = ''
                     this.messages = response.body.reduce(((init, messageObject) => {
                         userData = `${messageObject.nickname}: ${messageObject.message}`
-                        if (messageObject.session_token === this.current_session_token) {
-                            userData += `(${messageObject.state})`
+                        if ((messageObject.session_token === this.current_session_token) &&
+                            (messageObject.state !== 'delivered')) {
+                            userData += ` (${messageObject.state})`
                         }
                         init.push(userData)
                         return init
