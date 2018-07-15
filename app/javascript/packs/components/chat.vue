@@ -21,6 +21,7 @@
             setInterval(() => {
                 if (window.location.pathname == `/chats/${this.getChatToken()}`) {
                     this.getMessages()
+                    Rollbar.info("JS: Get all messages after 5 sec")
                 }
             }, 5000);
         },
@@ -42,6 +43,7 @@
                         return init
                     }), [])
                 });
+                Rollbar.info("JS: Get all messages")
             },
             saveMessage() {
                 if(this.message !== '') {
@@ -51,6 +53,7 @@
                         this.message = ''
                         this.getMessages()
                     });
+                    Rollbar.info("JS: Save message")
                 }
             },
             setStateRead() {

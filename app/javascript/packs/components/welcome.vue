@@ -19,6 +19,7 @@
                     ).then(response => {
                         if (response.body.session_token_found) {
                             this.$router.push(`/chats/${response.body.chat_token}`)
+                            Rollbar.info("JS: Enter to chat by session token")
                         } else {
                             this.rewriteSessionTokenInLocalStorage()
                         }
@@ -30,6 +31,7 @@
             rewriteSessionTokenInLocalStorage() {
                 localStorage.removeItem('session_token')
                 localStorage.setItem('session_token', gon.session_token)
+                Rollbar.info("JS: Rewrite session token in local storage")
             },
             createChat() {
                 this.$http.post('/chats',
@@ -37,6 +39,7 @@
                 ).then(response => {
                     if (response.body.session_token_unique) {
                         this.$router.push(`/chats/${response.body.chat_token}`)
+                        Rollbar.info("JS: Create a chat")
                     } else {
                         this.flash(this.$t('flash.session_token_exists'), 'error')
                     }
@@ -52,6 +55,7 @@
                     }
                     if (response.body.free_chat_found) {
                         this.$router.push(`/chats/${response.body.chat_token}`)
+                        Rollbar.info("JS: Join a random chat")
                     } else {
                         this.flash(this.$t('flash.no_empty_chats'), 'warning')
                     }
