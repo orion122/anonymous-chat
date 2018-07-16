@@ -6,12 +6,29 @@ class Chats::MessagesController < Chats::ApplicationController
 
     Rollbar.info('Get all messages')
 
-    render json: chat.messages.includes(:session).order(:id).map {
-        |message| message.as_json.merge({
-                                            nickname: message.session.nickname.as_json,
-                                            session_token: message.session.token.as_json
-                                        })
-    }
+    last_id = chat.messages.last.id
+    from_id = params[:last_received_id].to_i + 1
+
+    puts "===from_id=== #{from_id}"
+    puts "===last_id=== #{last_id}"
+
+    if from_id > last_id
+      render json: {}
+    elsif from_id == 0
+      render json: chat.messages.includes(:session).order(:id).map {
+          |message| message.as_json.merge({
+                                              nickname: message.session.nickname.as_json,
+                                              session_token: message.session.token.as_json
+                                          })
+      }
+    else
+      render json: chat.messages.includes(:session).where(id: from_id..last_id).order(:id).map {
+          |message| message.as_json.merge({
+                                              nickname: message.session.nickname.as_json,
+                                              session_token: message.session.token.as_json
+                                          })
+      }
+    end
   end
 
   def create
