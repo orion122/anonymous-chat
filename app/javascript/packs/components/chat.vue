@@ -14,15 +14,14 @@
             return {
                 message: '',
                 messages: [],
-                current_session_token: localStorage.getItem('session_token'),
-                last_received_id: 0
+                current_session_token: localStorage.getItem('session_token')
             }
         },
         mounted: function(){
             setInterval(() => {
                 if (window.location.pathname == `/chats/${this.getChatToken()}`) {
                     this.getMessages()
-                    // Rollbar.info("JS: Get all messages after 5 sec")
+                    Rollbar.info("JS: Get all messages after 5 sec")
                 }
             }, 5000);
         },
@@ -32,24 +31,20 @@
                 this.$router.push('/')
             },
             getMessages() {
-                this.$http.get(`/chats/${this.getChatToken()}/messages`,
-                    {params: {last_received_id: this.last_received_id}}
+                this.$http.get(`/chats/${this.getChatToken()}/messages`
                 ).then(response => {
-                    let nicknameAndMessage = ''
-                    let nicknamesAndMessages = response.body.reduce(((init, messageObject) => {
-                        nicknameAndMessage = `${messageObject.nickname}: ${messageObject.message}`
+                    let userData = ''
+                    this.messages = response.body.reduce(((init, messageObject) => {
+                        userData = `${messageObject.nickname}: ${messageObject.message}`
                         if ((messageObject.session_token === this.current_session_token) &&
                             (messageObject.state !== 'delivered')) {
-                            nicknameAndMessage += ` (${messageObject.state})`
+                            userData += ` (${messageObject.state})`
                         }
-                        init.push(nicknameAndMessage)
+                        init.push(userData)
                         return init
                     }), [])
-                    this.messages = [...this.messages, ...nicknamesAndMessages]
-                    console.log(response.body[response.body.length - 1].id)
-                    this.last_received_id = response.body[response.body.length - 1].id
                 });
-                // Rollbar.info("JS: Get all messages")
+                Rollbar.info("JS: Get all messages")
             },
             saveMessage() {
                 if(this.message !== '') {
@@ -59,7 +54,7 @@
                         this.message = ''
                         this.getMessages()
                     });
-                    // Rollbar.info("JS: Save message")
+                    Rollbar.info("JS: Save message")
                 }
             },
             setStateRead() {
