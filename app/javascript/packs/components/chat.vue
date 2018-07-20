@@ -24,21 +24,8 @@
             //         Rollbar.info("JS: Get all messages after 5 sec")
             //     }
             // }, 5000);
-            this.$nats.subscribe(this.current_session_token, function(event_description) {
-                this.$http.get(`/chats/${this.getChatToken()}/messages`
-                ).then(response => {
-                    let userData = ''
-                    this.messages = response.body.reduce(((init, messageObject) => {
-                        userData = `${messageObject.nickname}: ${messageObject.message}`
-                        if ((messageObject.session_token === this.current_session_token) &&
-                            (messageObject.state !== 'delivered')) {
-                            userData += ` (${messageObject.state})`
-                        }
-                        init.push(userData)
-                        return init
-                    }), [])
-                });
-                Rollbar.info("JS: Get all messages")
+            this.$nats.subscribe(this.current_session_token, function(message) {
+                this.messages = message
             });
         },
         methods: {
