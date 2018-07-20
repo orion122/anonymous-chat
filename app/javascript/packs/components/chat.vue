@@ -24,7 +24,7 @@
             //         Rollbar.info("JS: Get all messages after 5 sec")
             //     }
             // }, 5000);
-            nats.subscribe(this.current_session_token, function(event_description) {
+            this.$nats.subscribe(this.current_session_token, function(event_description) {
                 this.$http.get(`/chats/${this.getChatToken()}/messages`
                 ).then(response => {
                     let userData = ''
