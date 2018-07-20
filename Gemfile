@@ -40,6 +40,7 @@ gem 'pg', group: :production
 gem 'webpacker'
 gem 'haikunator'
 gem 'rollbar'
+gem 'nats'
 
 group :development, :test do
   gem 'sqlite3'
