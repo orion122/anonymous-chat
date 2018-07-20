@@ -21,6 +21,8 @@ class Chats::MessagesController < Chats::ApplicationController
 
     message.accept! if message.save
 
+    publication_create_message_event
+
     Rollbar.info('Save message in DB')
   end
 
@@ -41,6 +43,12 @@ class Chats::MessagesController < Chats::ApplicationController
       if message.send(from_state) && message.session.token != session_token
         message.send(to_state)
       end
+    end
+  end
+
+  def publication_create_message_event
+    NATS.start do
+      NATS.publish(session_token, 'create new message')
     end
   end
 end
