@@ -47,6 +47,7 @@ class Chats::MessagesController < Chats::ApplicationController
   end
 
   def publication_create_message_event
+    require "nats/client"
     NATS.start do
       NATS.publish(session_token, 'create new message')
     end
