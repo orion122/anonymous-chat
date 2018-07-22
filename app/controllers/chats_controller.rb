@@ -55,14 +55,13 @@ class ChatsController < ApplicationController
   end
 
   def enter_by_session_token
-    if session_exists
-      chat = session.chat
+    if session
 
       Rollbar.info('Enter a chat by session token')
 
       render json: {
           session_token_found: true,
-          chat_token: chat.token
+          chat_token: session.chat.token
       }
     else
       render json: {
