@@ -7,7 +7,7 @@ class ChatsController < ApplicationController
   end
 
   def create
-    if Session.find_by(token: params[:session_token])
+    if session_exists
       render json: { session_token_unique: false }
       return
     end
@@ -28,7 +28,7 @@ class ChatsController < ApplicationController
   def show; end
 
   def join_random
-    if Session.find_by(token: params[:session_token])
+    if session_exists
       render json: { session_token_unique: false }
       return
     end
@@ -55,9 +55,7 @@ class ChatsController < ApplicationController
   end
 
   def enter_by_session_token
-    session = Session.find_by(token: params[:session_token])
-
-    if session
+    if session_exists
       chat = session.chat
 
       Rollbar.info('Enter a chat by session token')
