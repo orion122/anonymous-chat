@@ -7,7 +7,7 @@ class ChatsController < ApplicationController
   end
 
   def create
-    if session_exists
+    if session
       render json: { session_token_unique: false }
       return
     end
@@ -28,7 +28,7 @@ class ChatsController < ApplicationController
   def show; end
 
   def join_random
-    if session_exists
+    if session
       render json: { session_token_unique: false }
       return
     end
