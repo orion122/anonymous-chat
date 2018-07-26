@@ -18,44 +18,42 @@
             }
         },
         mounted: function(){
-            // setInterval(() => {
-            //     if (window.location.pathname == `/chats/${this.getChatToken()}`) {
-            //         this.getMessages()
-            //         Rollbar.info("JS: Get all messages after 5 sec")
-            //     }
-            // }, 5000);
-            this.$nats.subscribe(this.current_session_token, function(message) {
-                this.messages = message
-            });
+            setInterval(() => {
+                if (window.location.pathname == `/chats/${this.getChatToken()}`) {
+                    this.getMessages()
+                    Rollbar.info("JS: Get all messages after 5 sec")
+                }
+            }, 5000);
         },
         methods: {
             logout() {
                 localStorage.removeItem('session_token')
                 this.$router.push('/')
+                console.log("logout " + localStorage.getItem('session_token'))
             },
-            // getMessages() {
-            //     this.$http.get(`/chats/${this.getChatToken()}/messages`
-            //     ).then(response => {
-            //         let userData = ''
-            //         this.messages = response.body.reduce(((init, messageObject) => {
-            //             userData = `${messageObject.nickname}: ${messageObject.message}`
-            //             if ((messageObject.session_token === this.current_session_token) &&
-            //                 (messageObject.state !== 'delivered')) {
-            //                 userData += ` (${messageObject.state})`
-            //             }
-            //             init.push(userData)
-            //             return init
-            //         }), [])
-            //     });
-            //     Rollbar.info("JS: Get all messages")
-            // },
+            getMessages() {
+                this.$http.get(`/chats/${this.getChatToken()}/messages`
+                ).then(response => {
+                    let userData = ''
+                    this.messages = response.body.reduce(((init, messageObject) => {
+                        userData = `${messageObject.nickname}: ${messageObject.message}`
+                        if ((messageObject.session_token === this.current_session_token) &&
+                            (messageObject.state !== 'delivered')) {
+                            userData += ` (${messageObject.state})`
+                        }
+                        init.push(userData)
+                        return init
+                    }), [])
+                });
+                Rollbar.info("JS: Get all messages")
+            },
             saveMessage() {
                 if(this.message !== '') {
                     this.$http.post(`/chats/${this.getChatToken()}/messages`,
                         {message: this.message}
                     ).then(response => {
                         this.message = ''
-                        // this.getMessages()
+                        this.getMessages()
                     });
                     Rollbar.info("JS: Save message")
                 }

@@ -13,9 +13,6 @@ Vue.use(VueRouter)
 Vue.use(VueFlashMessage)
 Vue.use(VueI18n)
 
-var nats = require('websocket-nats').connect('ws://37.60.177.139:4223')
-Object.defineProperty(Vue.prototype, '$nats', { value: nats })
-
 const router = new VueRouter({
     mode: 'history',
     routes: [

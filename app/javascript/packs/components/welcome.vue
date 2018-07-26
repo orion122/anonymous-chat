@@ -12,6 +12,7 @@
     export default {
         methods: {
             enterBySessionToken() {
+                console.log("enterBySessionToken " + localStorage.getItem('session_token'))
                 let session_token = localStorage.getItem('session_token')
                 if (session_token !== null) {
                     this.$http.post('/chats/enter_by_session_token',
@@ -31,6 +32,7 @@
             rewriteSessionTokenInLocalStorage() {
                 localStorage.removeItem('session_token')
                 localStorage.setItem('session_token', gon.session_token)
+                console.log("rewriteSessionTokenInLocalStorage " + localStorage.getItem('session_token'))
                 Rollbar.info("JS: Rewrite session token in local storage")
             },
             createChat() {
