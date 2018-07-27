@@ -24,9 +24,10 @@
             //         Rollbar.info("JS: Get all messages after 5 sec")
             //     }
             // }, 5000);
-            this.$nats.subscribe(this.current_session_token, function(message) {
+            function msg(message) {
                 this.messages = message
-            });
+            }
+            this.$nats.subscribe(this.current_session_token, msg.bind(app));
         },
         methods: {
             logout() {
