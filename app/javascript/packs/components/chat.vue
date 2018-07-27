@@ -25,7 +25,7 @@
             //     }
             // }, 5000);
             function msg(message) {
-                this.messages = message
+                this.messages.push(message)
             }
             this.$nats.subscribe(this.current_session_token, msg.bind(app));
         },
@@ -57,7 +57,7 @@
                         {message: this.message}
                     ).then(response => {
                         this.message = ''
-                        this.getMessages()
+                        // this.getMessages()
                     });
                     Rollbar.info("JS: Save message")
                 }
