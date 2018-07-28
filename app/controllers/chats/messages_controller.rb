@@ -21,11 +21,7 @@ class Chats::MessagesController < Chats::ApplicationController
 
     message.accept! if message.save
 
-
-
-    publication_create_message_event(
-        message.merge({ nickname: message.session.nickname.as_json })
-    )
+    publication_create_message_event("#{message.session.nickname}: #{message.message}")
 
     Rollbar.info('Save message in DB')
   end
@@ -53,7 +49,7 @@ class Chats::MessagesController < Chats::ApplicationController
   def publication_create_message_event(message)
     require "nats/client"
     NATS.start do
-      NATS.publish(session_token, message)
+      NATS.publish(params[:chat_token], message)
     end
   end
 end

@@ -26,10 +26,10 @@
             //     }
             // }, 5000);
             function msg(messageObject) {
-                this.messages.push(`${messageObject.nickname}: ${messageObject.message}`)
+                this.messages.push(messageObject)
                 this.message = ''
             }
-            this.$nats.subscribe(this.current_session_token, msg.bind(this));
+            this.$nats.subscribe(this.getChatToken(), msg.bind(this));
         },
         methods: {
             logout() {
