@@ -21,7 +21,11 @@ class Chats::MessagesController < Chats::ApplicationController
 
     message.accept! if message.save
 
-    publication_create_message_event(params[:message])
+
+
+    publication_create_message_event(
+        message.merge({ nickname: message.session.nickname.as_json })
+    )
 
     Rollbar.info('Save message in DB')
   end

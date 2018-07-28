@@ -25,8 +25,8 @@
             //         Rollbar.info("JS: Get all messages after 5 sec")
             //     }
             // }, 5000);
-            function msg(message) {
-                this.messages.push(message)
+            function msg(messageObject) {
+                this.messages.push(`${messageObject.nickname}: ${messageObject.message}`)
                 this.message = ''
             }
             this.$nats.subscribe(this.current_session_token, msg.bind(this));
@@ -37,22 +37,22 @@
                 this.$router.push('/')
                 console.log("logout " + localStorage.getItem('session_token'))
             },
-             getMessages() {
-                 this.$http.get(`/chats/${this.getChatToken()}/messages`
-                 ).then(response => {
-                     let userData = ''
-                     this.messages = response.body.reduce(((init, messageObject) => {
-                         userData = `${messageObject.nickname}: ${messageObject.message}`
-                         if ((messageObject.session_token === this.current_session_token) &&
-                             (messageObject.state !== 'delivered')) {
-                             userData += ` (${messageObject.state})`
-                         }
-                         init.push(userData)
-                         return init
-                     }), [])
-                 });
-                 Rollbar.info("JS: Get all messages")
-             },
+            getMessages() {
+             this.$http.get(`/chats/${this.getChatToken()}/messages`
+             ).then(response => {
+                 let userData = ''
+                 this.messages = response.body.reduce(((init, messageObject) => {
+                     userData = `${messageObject.nickname}: ${messageObject.message}`
+                     if ((messageObject.session_token === this.current_session_token) &&
+                         (messageObject.state !== 'delivered')) {
+                         userData += ` (${messageObject.state})`
+                     }
+                     init.push(userData)
+                     return init
+                 }), [])
+             });
+             Rollbar.info("JS: Get all messages")
+            },
             saveMessage() {
                 if(this.message !== '') {
                     this.$http.post(`/chats/${this.getChatToken()}/messages`,
@@ -66,7 +66,7 @@
             },
             setStateRead() {
                 this.$http.post(`/chats/${this.getChatToken()}/messages/set_state_read`,
-                    {message: this.message}
+                    // {message: this.message}
                 );
             },
             getChatToken() {
