@@ -2,7 +2,7 @@
     <div id="chat" class="chat">
         <button @click='logout' class='logout'>{{ this.$t('chat.leave_chat') }}</button>
         <ul class="messages" v-chat-scroll>
-            <li class="message" v-for="n in messages">{{ n }}</li>
+            <li class="message" v-for="message in messages">{{ message }}</li>
         </ul>
         <input type="text" class='input-box_text' v-model.trim="message" @keyup.enter="saveMessage()" />
     </div>
