@@ -19,23 +19,18 @@
         },
         mounted: function(){
             this.getMessages()
-            // setInterval(() => {
-            //     if (window.location.pathname == `/chats/${this.getChatToken()}`) {
-            //         this.getMessages()
-            //         Rollbar.info("JS: Get all messages after 5 sec")
-            //     }
-            // }, 5000);
+
             function msg(messageObject) {
                 this.messages.push(messageObject)
                 this.message = ''
             }
+
             this.$nats.subscribe(this.getChatToken(), msg.bind(this));
         },
         methods: {
             logout() {
                 localStorage.removeItem('session_token')
-                this.$router.push('/')
-                console.log("logout " + localStorage.getItem('session_token'))
+                window.location.href = '/'
             },
             getMessages() {
              this.$http.get(`/chats/${this.getChatToken()}/messages`
@@ -58,8 +53,6 @@
                     this.$http.post(`/chats/${this.getChatToken()}/messages`,
                         {message: this.message}
                     ).then(response => {
-                        // this.message = ''
-                        // this.getMessages()
                     });
                     Rollbar.info("JS: Save message")
                 }
