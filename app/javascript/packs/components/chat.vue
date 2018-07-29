@@ -13,7 +13,7 @@
         data() {
             return {
                 message: '',
-                messages: [],
+                messages: {},
                 current_session_token: localStorage.getItem('session_token')
             }
         },
@@ -21,11 +21,22 @@
             this.getMessages()
 
             function msg(messageObject) {
-                this.messages.push(messageObject)
+                const key = Object.keys(messageObject)[0]
+                const message = Object.values(messageObject)[0]
+
+                this.messages[key] = message
                 this.message = ''
             }
 
-            this.$nats.subscribe(this.getChatToken(), msg.bind(this));
+            function change_state(messageObject) {
+                const key = Object.keys(messageObject)[0]
+                const message = Object.values(messageObject)[0]
+
+                this.messages[key] = message
+            }
+
+            this.$nats.subscribe(this.getChatToken(), msg.bind(this))
+            this.$nats.subscribe(`${this.getChatToken()}_state`, change_state.bind(this))
         },
         methods: {
             logout() {

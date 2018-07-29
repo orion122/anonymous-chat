@@ -21,13 +21,17 @@ class Chats::MessagesController < Chats::ApplicationController
 
     message.accept! if message.save
 
-    publication_create_message_event("#{message.session.nickname}: #{message.message}")
+    message_object = { "#{message.id}": "#{message.session.nickname}: #{message.message} (#{message.state})" }
+
+    publication_create_message_event(message_object)
 
     Rollbar.info('Save message in DB')
   end
 
   def set_state_read
     change_state(chat.messages, :may_read?, :read!)
+
+    publication_create_message_event("#{chat.messages.last.id}": "#{chat.messages.last.message}")
   end
 
   private
@@ -46,10 +50,17 @@ class Chats::MessagesController < Chats::ApplicationController
     end
   end
 
-  def publication_create_message_event(message)
+  def publication_create_message_event(message_object)
     require "nats/client"
     NATS.start do
-      NATS.publish(params[:chat_token], message)
+      NATS.publish(params[:chat_token], message_object)
+    end
+  end
+
+  def publication_state_read_event(message_object)
+    require "nats/client"
+    NATS.start do
+      NATS.publish("#{params[:chat_token]}_state", message_object)
     end
   end
 end
