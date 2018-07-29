@@ -21,7 +21,7 @@ class Chats::MessagesController < Chats::ApplicationController
 
     message.accept! if message.save
 
-    message_object = { "#{message.id}": "#{message.session.nickname}: #{message.message} (#{message.state})" }
+    message_object = "{\"#{message.id}\": \"#{message.session.nickname}: #{message.message} (#{message.state})\"}"
 
     publication_create_message_event(message_object)
 
@@ -31,7 +31,7 @@ class Chats::MessagesController < Chats::ApplicationController
   def set_state_read
     change_state(chat.messages, :may_read?, :read!)
 
-    publication_create_message_event("#{chat.messages.last.id}": "#{chat.messages.last.message}")
+#    publication_create_message_event({ "#{chat.messages.last.id}: #{chat.messages.last.message}" })
   end
 
   private
@@ -64,3 +64,4 @@ class Chats::MessagesController < Chats::ApplicationController
     end
   end
 end
+

@@ -2,7 +2,7 @@
     <div id="chat" class="chat">
         <button @click='logout' class='logout'>{{ this.$t('chat.leave_chat') }}</button>
         <ul class="messages" v-chat-scroll>
-            <li class="message" v-for="message in messages">{{ message }}</li>
+            <li class="message" v-for="(value, key, index) in messages">{{ value }}</li>
         </ul>
         <input type="text" class='input-box_text' v-model.trim="message" @keyup.enter="saveMessage()" />
     </div>
@@ -20,19 +20,22 @@
         mounted: function(){
             this.getMessages()
 
-            function msg(messageObject) {
+            function msg(msg) {
+                console.log(msg)
+                const messageObject = JSON.parse(msg)
                 const key = Object.keys(messageObject)[0]
-                const message = Object.values(messageObject)[0]
+                const messageString = Object.values(messageObject)[0]
 
-                this.messages[key] = message
+                this.messages[key] = messageString
                 this.message = ''
             }
 
-            function change_state(messageObject) {
+            function change_state(msg) {
+                const messageObject = JSON.parse(msg)
                 const key = Object.keys(messageObject)[0]
-                const message = Object.values(messageObject)[0]
+                const messageString = Object.values(messageObject)[0]
 
-                this.messages[key] = message
+                this.messages[key] = messageString
             }
 
             this.$nats.subscribe(this.getChatToken(), msg.bind(this))
@@ -84,3 +87,4 @@
         }
     }
 </script>
+
