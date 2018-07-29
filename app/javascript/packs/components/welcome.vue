@@ -1,10 +1,10 @@
 <template>
     <div id="welcome">
+        {{ enterBySessionToken() }}
         <flash-message></flash-message>
         <h1>{{ $t("root.welcome") }}</h1>
         <button @click="createChat()">{{ $t("root.create_chat") }}</button>
         <button @click="joinRandomChat()">{{ $t("root.join_random_chat") }}</button>
-        {{ enterBySessionToken() }}
     </div>
 </template>
 
