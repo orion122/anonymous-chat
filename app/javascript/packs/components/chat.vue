@@ -33,8 +33,8 @@
                 window.location.href = '/'
             },
             getMessages() {
-             this.$http.get(`/chats/${this.getChatToken()}/messages`
-             ).then(response => {
+                this.$http.get(`/chats/${this.getChatToken()}/messages`
+                ).then(response => {
                  let userData = ''
                  this.messages = response.body.reduce(((init, messageObject) => {
                      userData = `${messageObject.nickname}: ${messageObject.message}`
@@ -45,8 +45,8 @@
                      init.push(userData)
                      return init
                  }), [])
-             });
-             Rollbar.info("JS: Get all messages")
+                });
+                Rollbar.info("JS: Get all messages")
             },
             saveMessage() {
                 if(this.message !== '') {
