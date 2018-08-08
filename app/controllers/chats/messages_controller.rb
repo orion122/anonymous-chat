@@ -4,7 +4,7 @@ class Chats::MessagesController < Chats::ApplicationController
   def index
     change_state(chat.messages, :may_deliver?, :deliver!)
 
-    Rollbar.info('Get all messages')
+    # Rollbar.info('Get all messages')
 
     render json: chat.messages.includes(:session).order(:id).map {
         |message| message.as_json.merge({
@@ -21,23 +21,15 @@ class Chats::MessagesController < Chats::ApplicationController
 
     message.accept! if message.save
 
-    change_state(chat.messages, :may_deliver?, :deliver!)
+    message_object_string = "{\"#{message.id}\": \"#{message.session.nickname}: #{message.message} (#{message.state})\"}"
 
-    message_object = "{\"#{message.id}\": \"#{message.session.nickname}: #{message.message} (#{message.state})\"}"
+    publication_create_message_event(message_object_string)
 
-    puts "=== #{message_object} ==="
-
-    publication_create_message_event(message_object)
-
-    Rollbar.info('Save message in DB')
+    # Rollbar.info('Save message in DB')
   end
 
   def set_state_read
     change_state(chat.messages, :may_read?, :read!)
-
-    last_message = chat.messages.last
-
-    publication_state_read_event("{\"#{last_message.id}\": \"#{last_message.session.nickname}: #{last_message.message} (#{last_message.state})\"}")
   end
 
   private
@@ -56,18 +48,11 @@ class Chats::MessagesController < Chats::ApplicationController
     end
   end
 
-  def publication_create_message_event(message_object)
+  def publication_create_message_event(message_object_string)
     require "nats/client"
     NATS.start do
-      NATS.publish(params[:chat_token], message_object)
-    end
-  end
-
-  def publication_state_read_event(message_object)
-    require "nats/client"
-    NATS.start do
-      NATS.publish("#{params[:chat_token]}(read)", message_object)
+      NATS.publish(params[:chat_token], message_object_string)
+      NATS.stop
     end
   end
 end
-
