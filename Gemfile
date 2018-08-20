@@ -41,6 +41,7 @@ gem 'webpacker'
 gem 'haikunator'
 gem 'rollbar'
 gem 'nats'
+gem 'bootstrap'
 
 group :development, :test do
   gem 'sqlite3'
