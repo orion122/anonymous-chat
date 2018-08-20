@@ -1,6 +1,6 @@
 <template>
     <div id="chat" class="chat">
-        <button @click='logout' class='logout'>{{ this.$t('chat.leave_chat') }}</button>
+        <button @click='logout' class='logout btn btn-secondary'>{{ this.$t('chat.leave_chat') }}</button>
         <ul class="messages" v-chat-scroll>
             <li class="message" v-for="n in messages">{{ n }}</li>
         </ul>
@@ -28,8 +28,7 @@
         methods: {
             logout() {
                 localStorage.removeItem('session_token')
-                this.$router.push('/')
-                console.log("logout " + localStorage.getItem('session_token'))
+                window.location.href = '/'
             },
             getMessages() {
                 this.$http.get(`/chats/${this.getChatToken()}/messages`

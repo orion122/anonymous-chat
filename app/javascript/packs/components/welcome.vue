@@ -1,9 +1,11 @@
 <template>
-    <div id="welcome">
+    <div id="welcome" class="text-center">
         <flash-message></flash-message>
-        <h1>{{ $t("root.welcome") }}</h1>
-        <button @click="createChat()">{{ $t("root.create_chat") }}</button>
-        <button @click="joinRandomChat()">{{ $t("root.join_random_chat") }}</button>
+        <h1 class="mt-5">{{ $t("root.welcome") }}</h1>
+        <div class="container">
+            <button @click="createChat()" type="button" class="btn btn-primary">{{ $t("root.create_chat") }}</button>
+            <button @click="joinRandomChat()" type="button" class="btn btn-danger">{{ $t("root.join_random_chat") }}</button>
+        </div>
         {{ enterBySessionToken() }}
     </div>
 </template>
@@ -12,7 +14,6 @@
     export default {
         methods: {
             enterBySessionToken() {
-                console.log("enterBySessionToken " + localStorage.getItem('session_token'))
                 let session_token = localStorage.getItem('session_token')
                 if (session_token !== null) {
                     this.$http.post('/chats/enter_by_session_token',
@@ -32,7 +33,6 @@
             rewriteSessionTokenInLocalStorage() {
                 localStorage.removeItem('session_token')
                 localStorage.setItem('session_token', gon.session_token)
-                console.log("rewriteSessionTokenInLocalStorage " + localStorage.getItem('session_token'))
                 Rollbar.info("JS: Rewrite session token in local storage")
             },
             createChat() {
@@ -43,7 +43,7 @@
                         this.$router.push(`/chats/${response.body.chat_token}`)
                         Rollbar.info("JS: Create a chat")
                     } else {
-                        this.flash(this.$t('flash.session_token_exists'), 'error')
+                        this.flash(this.$t('flash.session_token_exists'), 'alert alert-danger')
                     }
                 });
             },
@@ -52,14 +52,14 @@
                     {session_token: gon.session_token}
                 ).then(response => {
                     if (!response.body.session_token_unique) {
-                        this.flash(this.$t('flash.session_token_exists'), 'error')
+                        this.flash(this.$t('flash.session_token_exists'), 'alert alert-danger')
                         return
                     }
                     if (response.body.free_chat_found) {
                         this.$router.push(`/chats/${response.body.chat_token}`)
                         Rollbar.info("JS: Join a random chat")
                     } else {
-                        this.flash(this.$t('flash.no_empty_chats'), 'warning')
+                        this.flash(this.$t('flash.no_empty_chats'), 'alert alert-primary')
                     }
                 });
             }
