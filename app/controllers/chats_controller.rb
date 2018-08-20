@@ -1,7 +1,6 @@
 class ChatsController < ApplicationController
   def welcome
-    @session_token = SecureRandom.uuid
-    gon.session_token = @session_token
+    gon.session_token = SecureRandom.uuid
     @chat = Chat.new
     Rollbar.info('Visiting the main page')
   end
