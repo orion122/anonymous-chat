@@ -3,14 +3,13 @@ class Chats::MessagesController < Chats::ApplicationController
 
   def index
     change_state(chat.messages, :may_deliver?, :deliver!)
-
     Rollbar.info('Get all messages')
 
-    render json: chat.messages.includes(:session).order(:id).map {
-        |message| message.as_json.merge({
-                                            nickname: message.session.nickname.as_json,
-                                            session_token: message.session.token.as_json
-                                        })
+    render json: chat.messages.includes(:session).order(:id).map { |message|
+      message.as_json.merge(
+        nickname: message.session.nickname.as_json,
+        session_token: message.session.token.as_json
+      )
     }
   end
 
@@ -31,9 +30,8 @@ class Chats::MessagesController < Chats::ApplicationController
   private
 
   def chat_has_session
-    if chat.sessions.where(token: session_token).empty?
-      render body: nil, status: :forbidden
-    end
+    render body: nil, status: :forbidden if
+        chat.sessions.where(token: session_token).empty?
   end
 
   def change_state(messages, from_state, to_state)

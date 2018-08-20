@@ -19,8 +19,8 @@ class ChatsController < ApplicationController
     Rollbar.info('Create a chat')
 
     render json: {
-        session_token_unique: true,
-        chat_token: chat_token
+      session_token_unique: true,
+      chat_token: chat_token
     }
   end
 
@@ -35,20 +35,23 @@ class ChatsController < ApplicationController
     random_chat = Chat.where(filled: false).order('RANDOM()').first
     if random_chat
       nickname = Haikunator.haikunate(0, ' ').titleize
-      random_chat.sessions.create(token: params[:session_token], nickname: nickname)
+      random_chat.sessions.create(
+        token: params[:session_token],
+        nickname: nickname
+      )
       random_chat.update(filled: true)
 
       Rollbar.info('Join a random chat')
 
       render json: {
-          session_token_unique: true,
-          free_chat_found: true,
-          chat_token: random_chat.token
+        session_token_unique: true,
+        free_chat_found: true,
+        chat_token: random_chat.token
       }
     else
       render json: {
-          session_token_unique: true,
-          free_chat_found: false
+        session_token_unique: true,
+        free_chat_found: false
       }
     end
   end
@@ -59,14 +62,13 @@ class ChatsController < ApplicationController
       Rollbar.info('Enter a chat by session token')
 
       render json: {
-          session_token_found: true,
-          chat_token: session_found_by_token.chat.token
+        session_token_found: true,
+        chat_token: session_found_by_token.chat.token
       }
     else
       render json: {
-          session_token_found: false
+        session_token_found: false
       }
     end
-
   end
 end
