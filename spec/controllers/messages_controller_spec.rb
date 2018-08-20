@@ -55,7 +55,12 @@ RSpec.describe Chats::MessagesController, type: :controller do
     end
 
     it 'return message' do
-      expect(response.body).to eq(chat.messages.to_json)
+      expect(response.body).to eq(chat.messages.includes(:session).order(:id).map { |message|
+        message.as_json.merge(
+          nickname: 'nickname',
+          session_token: session1.token
+        )
+      }.to_json)
     end
 
     it 'message state is accepted' do
@@ -78,7 +83,12 @@ RSpec.describe Chats::MessagesController, type: :controller do
     end
 
     it 'return message' do
-      expect(response.body).to eq(chat.messages.to_json)
+      expect(response.body).to eq(chat.messages.includes(:session).order(:id).map { |message|
+        message.as_json.merge(
+          nickname: 'nickname',
+          session_token: session1.token
+        )
+      }.to_json)
     end
 
     it 'message state is delivered' do

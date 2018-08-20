@@ -50,14 +50,6 @@ RSpec.describe Chats::ChatsController, type: :controller do
     end
   end
 
-  describe 'GET #show' do
-    let(:chat) { create(:chat) }
-
-    subject { get :show, params: { token: chat.token } }
-
-    it { is_expected.to render_template(:show) }
-  end
-
   describe 'POST #join_random, when an empty chat exists' do
     before do
       post :create, params: { session_token: SecureRandom.uuid }
@@ -65,9 +57,11 @@ RSpec.describe Chats::ChatsController, type: :controller do
     end
 
     it 'render json where session_token_unique and free_chat_found is true' do
-      expect(response.body).to eq({ session_token_unique: true,
-                               free_chat_found: true,
-                               chat_token: Chat.first.token }.to_json)
+      expect(response.body).to eq({
+        session_token_unique: true,
+        free_chat_found: true,
+        chat_token: Chat.first.token
+      }.to_json)
     end
 
     it 'sets @chat.filled to true' do
