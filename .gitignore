@@ -30,6 +30,5 @@ yarn-debug.log*
 .yarn-integrity
 
 config/database.yml
-config/secrets.yml
 
 public/assets
