@@ -1,12 +1,12 @@
 <template>
     <div id="welcome" class="text-center">
+        {{ enterBySessionToken() }}
         <flash-message></flash-message>
         <h1 class="mt-5">{{ $t("root.welcome") }}</h1>
         <div class="container">
             <button @click="createChat()" type="button" class="btn btn-primary">{{ $t("root.create_chat") }}</button>
             <button @click="joinRandomChat()" type="button" class="btn btn-danger">{{ $t("root.join_random_chat") }}</button>
         </div>
-        {{ enterBySessionToken() }}
     </div>
 </template>
 
