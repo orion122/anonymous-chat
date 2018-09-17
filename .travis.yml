@@ -1,0 +1,17 @@
+dist: xenial
+language: ruby
+rvm:
+  - 2.5.0
+env:
+  global:
+    - DB=sqlite
+    - CC_TEST_REPORTER_ID=5fdf7db5aa7849dedf37f0bae112d0150e658adf70bd30a555453b469a20aa92
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+script:
+  - bundle exec rails db:migrate RAILS_ENV=test
+  - bundle exec rspec
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
